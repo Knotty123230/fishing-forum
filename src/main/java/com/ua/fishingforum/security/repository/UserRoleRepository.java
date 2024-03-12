@@ -1,0 +1,11 @@
+package com.ua.fishingforum.security.repository;
+
+
+import com.ua.fishingforum.security.model.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
+    Optional<UserRole> findByAuthority(String authority);
+}
