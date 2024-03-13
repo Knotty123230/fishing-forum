@@ -34,4 +34,9 @@ public class PostServiceImpl implements PostService {
     public Page<Post> findAllNews(Long id, PageRequest pageRequest) {
         return postRepository.findNews(id, pageRequest);
     }
+
+    @Override
+    public Page<Post> findAll(PageRequest pageRequest) {
+        return this.postRepository.findAll(pageRequest);
+    }
 }

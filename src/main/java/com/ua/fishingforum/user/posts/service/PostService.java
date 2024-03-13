@@ -12,4 +12,6 @@ public interface PostService {
     Page<Post> findAllPostsForCurrentUser(Long id, PageRequest pageRequest);
 
     Page<Post> findAllNews(Long id, PageRequest pageRequest);
+
+    Page<Post> findAll(PageRequest pageRequest);
 }

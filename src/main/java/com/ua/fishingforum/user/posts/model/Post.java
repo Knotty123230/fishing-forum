@@ -36,12 +36,13 @@ public class Post {
     @ManyToOne
     @ToString.Exclude
     private Mark mark;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_likes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "like_id"), schema = "forum")
+
     private List<Like> likes;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(schema = "forum", name = "user_posts_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))

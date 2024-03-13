@@ -6,6 +6,7 @@ import com.ua.fishingforum.user.posts.model.Post;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -30,12 +31,14 @@ public class Like {
             joinColumns = @JoinColumn(name = "like_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id"), schema = "forum")
     @JsonIgnore
+    @ToString.Exclude
     private Post post;
     @ManyToOne
     @JoinTable(name = "comment_likes",
             joinColumns = @JoinColumn(name = "like_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"), schema = "forum")
     @JsonIgnore
+    @ToString.Exclude
     private Comment comment;
     @CreatedDate
     private Instant createdTimestamp;

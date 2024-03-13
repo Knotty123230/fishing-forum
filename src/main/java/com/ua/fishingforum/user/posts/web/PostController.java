@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class PostsController {
+public class PostController {
     private final CreatePostUseCase createPostUseCase;
     private final FindAllPostsUseCase findAllPostsUseCase;
 
@@ -20,8 +20,15 @@ public class PostsController {
     public PostResponse createPost(@RequestBody @Valid PostRequest postRequest) {
         return createPostUseCase.create(postRequest);
     }
+
     @GetMapping("/posts")
     public AllPostsResponse findAllPosts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         return findAllPostsUseCase.find(page, limit);
     }
+
+    @GetMapping("/post/likes")
+    public AllPostsResponse findAllPostsByLikes(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+        return findAllPostsUseCase.findByLikes(page, limit);
+    }
+
 }

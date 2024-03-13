@@ -37,7 +37,7 @@ public class Comment {
     @JsonIgnore
     @ToString.Exclude
     private Post post;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "comment_likes",
             joinColumns = @JoinColumn(name = "comment_id"),
             inverseJoinColumns = @JoinColumn(name = "like_id"), schema = "forum")

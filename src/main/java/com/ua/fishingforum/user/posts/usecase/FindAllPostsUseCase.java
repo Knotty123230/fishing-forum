@@ -9,4 +9,5 @@ import org.springframework.validation.annotation.Validated;
 public interface FindAllPostsUseCase {
     AllPostsResponse find(@Min(0) @Max(100) int page, @Min(30) @Max(180) int limit);
 
+    AllPostsResponse findByLikes(int page, int limit);
 }

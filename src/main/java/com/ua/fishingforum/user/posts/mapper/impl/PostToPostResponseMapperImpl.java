@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
     @Override
-    public PostResponse map(Post source) {
-        return new PostResponse(source.getName(),
-                source.getDescription(),
-                source.getImageUrl(),
-                source.getCreatedTimestamp());
+    public PostResponse map(Post post) {
+        return new PostResponse(post.getName(),
+                post.getDescription(),
+                post.getImageUrl(),
+                post.getCreatedTimestamp());
     }
 }

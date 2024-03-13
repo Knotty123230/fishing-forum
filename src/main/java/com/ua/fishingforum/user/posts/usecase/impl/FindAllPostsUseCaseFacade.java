@@ -9,9 +9,13 @@ import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,5 +31,18 @@ public class FindAllPostsUseCaseFacade implements FindAllPostsUseCase {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
         Page<Post> allPostsForCurrentUser = postService.findAllPostsForCurrentUser(userProfile.getId(), pageRequest);
         return pagePostsToAllPostsResponseMapper.map(allPostsForCurrentUser);
+    }
+
+    @Override
+    public AllPostsResponse findByLikes(int page, int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit);
+        Page<Post> posts = postService.findAll(pageRequest);
+        List<Post> postList = posts.stream().sorted(Comparator.comparing(
+                post -> post.getLikes().size(),
+                Comparator.reverseOrder())
+                )
+                .toList();
+        Page<Post> postPage = new PageImpl<>(postList);
+        return pagePostsToAllPostsResponseMapper.map(postPage);
     }
 }

@@ -9,9 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+    @Query("SELECT p FROM Post p JOIN FETCH p.userProfile LEFT JOIN FETCH p.likes l ")
+    Page<Post> findAll(Pageable pageable);
+
     Page<Post> findAllPostsByUserProfileId(Long id, PageRequest pageRequest);
 
-    @Query("SELECT p FROM Post p WHERE p.userProfile.id != :id")
+    @Query("SELECT p FROM Post p JOIN FETCH p.userProfile JOIN fetch p.likes WHERE p.userProfile.id != :id")
     Page<Post> findNews(@Param("id") Long id, Pageable pageRequest);
-
 }

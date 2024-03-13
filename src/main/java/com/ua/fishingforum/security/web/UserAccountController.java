@@ -1,6 +1,5 @@
 package com.ua.fishingforum.security.web;
 
-import com.ua.fishingforum.security.service.EmailService;
 import com.ua.fishingforum.security.usecase.RegisterUserAccountUseCase;
 import com.ua.fishingforum.security.web.dto.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserAccountController {
     private final RegisterUserAccountUseCase registerUserAccountUseCase;
-    private final EmailService verificationService;
 
 
     @PostMapping("/register")
