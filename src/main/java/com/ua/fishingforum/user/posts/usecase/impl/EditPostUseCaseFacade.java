@@ -18,6 +18,7 @@ public class EditPostUseCaseFacade implements EditPostUseCase {
     private final CurrentUserProfileApiService currentUserProfileApiService;
     private final PostService postService;
     private final PostToPostResponseMapper postToPostResponseMapper;
+
     @Override
     public PostResponse editPost(Long postId, PostRequest postRequest) {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();

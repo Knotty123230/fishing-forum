@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
     private final PostService postService;
+
     @Override
     public PostResponse map(Post post) {
         Post createdPost = postService.create(post);

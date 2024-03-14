@@ -12,10 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserProfileToUserProfileResponseImpl implements UserProfileToUserProfileResponse {
     private final UserProfileService userProfileService;
+
     @Override
     public UserProfileResponse map(UserProfile source) {
         boolean existsByNickname = userProfileService.existsByNickname(source.getNickname());
-        if (existsByNickname){
+        if (existsByNickname) {
             throw new CustomException("юзер з таким нікнеймом: %s уже існує".formatted(source.getNickname()));
         }
         UserProfile editedUserProfile = userProfileService.editUserProfile(source);

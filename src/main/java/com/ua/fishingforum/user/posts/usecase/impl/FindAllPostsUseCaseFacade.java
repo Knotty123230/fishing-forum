@@ -39,8 +39,8 @@ public class FindAllPostsUseCaseFacade implements FindAllPostsUseCase {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
         Page<Post> posts = postService.findAll(userProfile.getId(), pageRequest);
         List<Post> postList = posts.stream().sorted(Comparator.comparing(
-                post -> post.getLikes().size(),
-                Comparator.reverseOrder())
+                        post -> post.getLikes().size(),
+                        Comparator.reverseOrder())
                 )
                 .toList();
         Page<Post> postPage = new PageImpl<>(postList);

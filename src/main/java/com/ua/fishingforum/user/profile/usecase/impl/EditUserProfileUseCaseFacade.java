@@ -19,12 +19,13 @@ public class EditUserProfileUseCaseFacade implements EditUserProfileUseCase {
     private final UserProfileService userProfileService;
     private final CurrentUserProfileApiService currentUserProfileApiService;
     private final UserProfileToUserProfileResponse userProfileToUserProfileResponse;
+
     @Override
     public UserProfileResponse editUserProfile(String nickname, UserProfileRequest userProfileRequest) {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
         UserProfile findedUserProfile = this.userProfileService.findUserProfileByNickname(nickname)
                 .orElseThrow(() -> new CustomException("юзера з таким нікнеймом %s не знайдено".formatted(nickname)));
-        if (!Objects.equals(userProfile.getNickname(), findedUserProfile.getNickname())){
+        if (!Objects.equals(userProfile.getNickname(), findedUserProfile.getNickname())) {
             throw new CustomException("корегування чужого профілю заборонено");
         }
         findedUserProfile.setNickname(userProfileRequest.nickname());

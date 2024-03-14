@@ -32,8 +32,9 @@ public class UserProfileController {
     public void createUserProfile(@RequestBody @Valid UserProfileRequest userProfileRequest) {
         userProfileCreateUseCase.createUserProfile(userProfileRequest);
     }
+
     @PutMapping("/edit/{nickname}")
-    public UserProfileResponse editUserProfile(@PathVariable String nickname,@Valid @RequestBody UserProfileRequest userProfileRequest){
+    public UserProfileResponse editUserProfile(@PathVariable String nickname, @Valid @RequestBody UserProfileRequest userProfileRequest) {
         return editUserProfileUseCase.editUserProfile(nickname, userProfileRequest);
     }
 

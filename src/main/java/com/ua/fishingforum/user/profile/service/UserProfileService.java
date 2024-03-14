@@ -11,6 +11,7 @@ public interface UserProfileService {
     UserProfile findUserProfileById(Long userProfileId);
 
     Optional<UserProfile> findUserProfileByNickname(String nickname);
+
     UserProfile editUserProfile(UserProfile userProfile);
 
     boolean existsByNickname(String nickname);

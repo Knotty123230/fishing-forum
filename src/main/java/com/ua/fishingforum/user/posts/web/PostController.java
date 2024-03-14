@@ -23,12 +23,14 @@ public class PostController {
     public PostResponse createPost(@RequestBody @Valid PostRequest postRequest) {
         return createPostUseCase.create(postRequest);
     }
+
     @GetMapping("/posts")
     public AllPostsResponse findAllPosts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
         return findAllPostsUseCase.find(page, limit);
     }
+
     @PutMapping("/post/edit/{postId}")
-    public PostResponse editPost(@PathVariable Long postId, @RequestBody PostRequest postRequest){
+    public PostResponse editPost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
         return editPostUseCase.editPost(postId, postRequest);
     }
 }
