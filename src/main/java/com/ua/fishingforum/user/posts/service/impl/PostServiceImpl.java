@@ -4,10 +4,13 @@ import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.user.posts.model.Post;
 import com.ua.fishingforum.user.posts.repository.PostRepository;
 import com.ua.fishingforum.user.posts.service.PostService;
+import com.ua.fishingforum.user.profile.model.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +39,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> findAll(PageRequest pageRequest) {
-        return this.postRepository.findAll(pageRequest);
+    public Page<Post> findAll(Long id, PageRequest pageRequest) {
+        return this.postRepository.findAll(id, pageRequest);
+    }
+
+    @Override
+    public Optional<Post> findPostByUserProfileAndId(UserProfile userProfile, Long postId) {
+        return postRepository.findByUserProfileAndId(userProfile, postId);
     }
 }

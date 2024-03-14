@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface NewsUseCase {
-
-    NewsResponse findNews(@Valid @Min(0) @Max(100) int page, @Min(50) @Max(180) int limit);
+    NewsResponse findNews(
+            @Valid @Min(0) @Max(100) int page,
+            @Min(50) @Max(180) int limit
+    );
 }

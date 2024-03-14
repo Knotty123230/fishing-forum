@@ -36,7 +36,8 @@ public class FindAllPostsUseCaseFacade implements FindAllPostsUseCase {
     @Override
     public AllPostsResponse findByLikes(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit);
-        Page<Post> posts = postService.findAll(pageRequest);
+        UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
+        Page<Post> posts = postService.findAll(userProfile.getId(), pageRequest);
         List<Post> postList = posts.stream().sorted(Comparator.comparing(
                 post -> post.getLikes().size(),
                 Comparator.reverseOrder())
