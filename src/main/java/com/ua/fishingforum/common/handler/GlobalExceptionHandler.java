@@ -1,4 +1,4 @@
-package com.ua.fishingforum.common;
+package com.ua.fishingforum.common.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

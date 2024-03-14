@@ -8,5 +8,4 @@ public interface MarkService {
 
     boolean existsByLatAndLng(double lat, double lng);
 
-
 }

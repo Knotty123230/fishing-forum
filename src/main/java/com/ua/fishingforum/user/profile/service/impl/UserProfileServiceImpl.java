@@ -7,6 +7,8 @@ import com.ua.fishingforum.user.profile.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserProfileServiceImpl implements UserProfileService {
@@ -24,8 +26,24 @@ public class UserProfileServiceImpl implements UserProfileService {
         userProfileRepository.save(userProfile);
     }
 
+
     @Override
     public UserProfile findUserProfileById(Long userProfileId) {
         return userProfileRepository.findById(userProfileId).orElseThrow(() -> new CustomException("профіля користувача з айді %s не існує".formatted(userProfileId)));
+    }
+
+    @Override
+    public Optional<UserProfile> findUserProfileByNickname(String nickname) {
+        return userProfileRepository.findByNickname(nickname);
+    }
+
+    @Override
+    public UserProfile editUserProfile(UserProfile userProfile) {
+        return this.userProfileRepository.save(userProfile);
+    }
+
+    @Override
+    public boolean existsByNickname(String nickname) {
+        return this.userProfileRepository.existsByNickname(nickname);
     }
 }

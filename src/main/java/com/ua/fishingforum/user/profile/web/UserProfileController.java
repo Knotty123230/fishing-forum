@@ -1,7 +1,9 @@
 package com.ua.fishingforum.user.profile.web;
 
+import com.ua.fishingforum.user.profile.usecase.EditUserProfileUseCase;
 import com.ua.fishingforum.user.profile.usecase.UserProfileCreateUseCase;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileRequest;
+import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserProfileController {
     private final UserProfileCreateUseCase userProfileCreateUseCase;
+    private final EditUserProfileUseCase editUserProfileUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,4 +32,9 @@ public class UserProfileController {
     public void createUserProfile(@RequestBody @Valid UserProfileRequest userProfileRequest) {
         userProfileCreateUseCase.createUserProfile(userProfileRequest);
     }
+    @PutMapping("/edit/{nickname}")
+    public UserProfileResponse editUserProfile(@PathVariable String nickname,@Valid @RequestBody UserProfileRequest userProfileRequest){
+        return editUserProfileUseCase.editUserProfile(nickname, userProfileRequest);
+    }
+
 }
