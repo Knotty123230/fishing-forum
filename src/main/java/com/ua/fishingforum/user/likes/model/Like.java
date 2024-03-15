@@ -42,4 +42,5 @@ public class Like {
     private Comment comment;
     @CreatedDate
     private Instant createdTimestamp;
+
 }

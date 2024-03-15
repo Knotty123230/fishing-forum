@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -31,5 +33,18 @@ public class UserProfile {
     }
 
     public UserProfile() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserProfile that = (UserProfile) o;
+        return Objects.equals(id, that.id) && Objects.equals(nickname, that.nickname) && Objects.equals(imageLink, that.imageLink);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nickname, imageLink);
     }
 }

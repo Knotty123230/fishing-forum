@@ -18,7 +18,8 @@ public class CurrentUserProfileApiServiceImpl implements CurrentUserProfileApiSe
 
     @Override
     public UserProfile currentUserProfile() {
-        CurrentUserApiModel currentUserApiModel = identityApiService.currentUserAccount().orElseThrow(() -> new CustomException("користувач повинен бути авторизований"));
+        CurrentUserApiModel currentUserApiModel = identityApiService.currentUserAccount().orElseThrow(() ->
+                new CustomException("користувач повинен бути авторизований"));
         return this.userProfileService.findUserProfileById(currentUserApiModel.userAccountId());
     }
 }

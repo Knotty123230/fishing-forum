@@ -1,5 +1,6 @@
 package com.ua.fishingforum.user.profile.api.service.impl;
 
+import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.user.profile.api.service.UserProfileApiService;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.service.UserProfileService;
