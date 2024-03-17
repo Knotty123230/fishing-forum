@@ -52,7 +52,6 @@ class UserProfileServiceImplTest {
         when(userProfileRepository.existsById(1L)).thenReturn(true);
         CustomException customException = assertThrows(CustomException.class, this::getUserProfileServiceUserProfile);
         String message = "Профіль користувача з таким id 1 уже був створений";
-
         assertEquals(message, customException.getMessage());
         verify(userProfileRepository, times(1)).existsById(any());
     }
