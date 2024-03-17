@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,7 @@ class UserProfileApiServiceImplTest {
         when(userProfileService.findUserProfileById(1L)).thenReturn(userProfile);
 
         UserProfile userProfileById = userProfileApiService.findUserProfileById(1L);
+        assertNotNull(userProfileById);
         assertEquals(userProfile, userProfileById);
         verify(userProfileService, times(1)).findUserProfileById(any());
 
