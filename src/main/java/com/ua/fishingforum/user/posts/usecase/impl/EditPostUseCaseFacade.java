@@ -22,10 +22,16 @@ public class EditPostUseCaseFacade implements EditPostUseCase {
     @Override
     public PostResponse editPost(Long postId, PostRequest postRequest) {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
+        Post post = getPost(postId, postRequest, userProfile);
+        Post createdPost = postService.create(post);
+        return postToPostResponseMapper.map(createdPost);
+    }
+
+    private Post getPost(Long postId, PostRequest postRequest, UserProfile userProfile) {
         Post post = postService.findPostByUserProfileAndId(userProfile, postId).orElseThrow(() -> new CustomException("ви не можете коригувати цей пост"));
         post.setDescription(postRequest.description());
         post.setName(postRequest.name());
         post.setImageUrl(postRequest.imageUrl());
-        return postToPostResponseMapper.map(post);
+        return post;
     }
 }

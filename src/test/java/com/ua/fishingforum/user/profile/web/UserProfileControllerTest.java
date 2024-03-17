@@ -37,13 +37,18 @@ class UserProfileControllerTest {
     @Test
     @WithMockUser
     void editUserProfile_shouldSuccessEditProfile() throws Exception {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1", "imageLink");
+        UserProfileRequest userProfileRequest = getUserProfileRequest();
         var requestBuilder = MockMvcRequestBuilders.put("/api/v1/user-profiles/edit/nickname")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))
                 .with(csrf());
         ResultActions perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().is2xxSuccessful());
+    }
+
+    private static UserProfileRequest getUserProfileRequest() {
+        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1", "imageLink");
+        return userProfileRequest;
     }
 
     @Test
@@ -60,7 +65,7 @@ class UserProfileControllerTest {
     @Test
     @WithMockUser
     void createUserProfile_shouldFailValidation() throws Exception {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("", "imageLink");
+        UserProfileRequest userProfileRequest = getUserProfileRequest();
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/user-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))
@@ -71,7 +76,7 @@ class UserProfileControllerTest {
     @Test
     @WithMockUser
     void createUserProfile_shouldHandleValidationErrors() throws Exception {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("", "imageLink");
+        UserProfileRequest userProfileRequest = getUserProfileRequest();
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/user-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))

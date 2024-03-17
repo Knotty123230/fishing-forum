@@ -46,4 +46,13 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> comments;
+
+    public Post(String name, String description, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
+    public Post() {
+    }
 }
