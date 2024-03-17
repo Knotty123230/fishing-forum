@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,7 +21,7 @@ class UserProfileApiServiceImplTest {
 
 
     @Test
-    void findUserProfileById_shouldReturnUserProfile(){
+    void findUserProfileById_shouldReturnUserProfile() {
         UserProfile userProfile = new UserProfile();
         userProfile.setNickname("nickname");
         userProfile.setImageLink("imageLink");
@@ -30,7 +30,6 @@ class UserProfileApiServiceImplTest {
 
         UserProfile userProfileById = userProfileApiService.findUserProfileById(1L);
         assertEquals(userProfile, userProfileById);
-
         verify(userProfileService, times(1)).findUserProfileById(any());
 
     }

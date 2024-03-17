@@ -13,33 +13,19 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserProfileServiceImplTest {
+
     @Mock
-    UserProfileRepository userProfileRepository;
+    private UserProfileRepository userProfileRepository;
+
     @InjectMocks
-    UserProfileServiceImpl userProfileService;
+    private UserProfileServiceImpl userProfileService;
 
-
-    @Test
-    void createUserProfile_shouldCreateUserProfile(){
-        UserProfile userProfile = getUserProfile();
-        when(userProfileRepository.existsById(1L)).thenReturn(false);
-        when(userProfileRepository.existsByNickname("nickname")).thenReturn(false);
-
-        when(userProfileRepository.save(userProfile)).thenReturn(userProfile);
-
-        userProfileService.createUserProfile(userProfile);
-
-        verify(userProfileRepository, times(1)).existsById(any());
-        verify(userProfileRepository, times(1)).existsByNickname(any());
-        verify(userProfileRepository, times(1)).save(any());
-
-    }
-
-    private static UserProfile getUserProfile() {
+    private UserProfile getUserProfile() {
         UserProfile userProfile = new UserProfile();
         userProfile.setId(1L);
         userProfile.setNickname("nickname");
@@ -48,47 +34,76 @@ class UserProfileServiceImplTest {
     }
 
     @Test
-    void createUserProfile_shouldThrowExceptionWhenUserWithIdAlreadyExists(){
-        when(userProfileRepository.existsById(1L)).thenReturn(true);
-        CustomException customException = assertThrows(CustomException.class, this::getUserProfileServiceUserProfile);
-        String message = "Профіль користувача з таким id 1 уже був створений";
-        assertEquals(message, customException.getMessage());
-        verify(userProfileRepository, times(1)).existsById(any());
-    }
-    @Test
-    void createUserProfile_shouldThrowExceptionWhenUserWithNicknameAlreadyExists(){
-        when(userProfileRepository.existsById(1L)).thenReturn(false);
-        when(userProfileRepository.existsByNickname("nickname")).thenReturn(true);
-        CustomException customException = assertThrows(CustomException.class, this::getUserProfileServiceUserProfile);
-        String message = "профіль з таким нікнеймом nickname уже існує";
+    void createUserProfile_shouldCreateUserProfile() {
+        // Arrange
+        UserProfile userProfile = getUserProfile();
+        when(userProfileRepository.existsById(any())).thenReturn(false);
+        when(userProfileRepository.existsByNickname(any())).thenReturn(false);
+        when(userProfileRepository.save(userProfile)).thenReturn(userProfile);
 
-        assertEquals(message, customException.getMessage());
-        verify(userProfileRepository, times(1)).existsById(any());
-        verify(userProfileRepository, times(1)).existsByNickname(any());
+        // Act
+        userProfileService.createUserProfile(userProfile);
 
+        // Assert
+        verify(userProfileRepository).existsById(any());
+        verify(userProfileRepository).existsByNickname(any());
+        verify(userProfileRepository).save(userProfile);
     }
+
     @Test
-    void findUserProfileById_shouldSuccess(){
+    void createUserProfile_shouldThrowExceptionWhenUserWithIdAlreadyExists() {
+        // Arrange
+        when(userProfileRepository.existsById(any())).thenReturn(true);
+
+        // Act & Assert
+        CustomException customException = assertThrows(CustomException.class, () ->
+                userProfileService.createUserProfile(getUserProfile()));
+        assertEquals("Профіль користувача з таким id 1 уже був створений", customException.getMessage());
+
+        // Verify
+        verify(userProfileRepository).existsById(any());
+    }
+
+    @Test
+    void createUserProfile_shouldThrowExceptionWhenUserWithNicknameAlreadyExists() {
+        // Arrange
+        when(userProfileRepository.existsById(any())).thenReturn(false);
+        when(userProfileRepository.existsByNickname(any())).thenReturn(true);
+
+        // Act & Assert
+        CustomException customException = assertThrows(CustomException.class, () ->
+                userProfileService.createUserProfile(getUserProfile()));
+        assertEquals("профіль з таким нікнеймом nickname уже існує", customException.getMessage());
+
+        // Verify
+        verify(userProfileRepository).existsById(any());
+        verify(userProfileRepository).existsByNickname(any());
+    }
+
+    @Test
+    void findUserProfileById_shouldSuccess() {
+        // Arrange
         when(userProfileRepository.findById(1L)).thenReturn(Optional.of(getUserProfile()));
 
+        // Act
         UserProfile userProfileById = userProfileService.findUserProfileById(1L);
-        UserProfile userProfile = getUserProfile();
 
-        assertEquals(userProfile, userProfileById);
-        verify(userProfileRepository,times(1)).findById(any());
-
+        // Assert
+        assertEquals(getUserProfile(), userProfileById);
+        verify(userProfileRepository).findById(1L);
     }
+
     @Test
-    void findUserProfileById_shouldThrowExceptionWhenRepositoryReturnEmptyUserProfile(){
+    void findUserProfileById_shouldThrowExceptionWhenRepositoryReturnEmptyUserProfile() {
         when(userProfileRepository.findById(1L)).thenReturn(Optional.empty());
 
-        CustomException customException = assertThrows(CustomException.class, this::findById);
-        String message = "профіля користувача з айді 1 не існує";
+        CustomException customException = assertThrows(CustomException.class, () ->
+                userProfileService.findUserProfileById(1L));
+        assertEquals("профіля користувача з айді 1 не існує", customException.getMessage());
 
-        assertEquals(message, customException.getMessage());
-
-        verify(userProfileRepository, times(1)).findById(any());
+        verify(userProfileRepository).findById(1L);
     }
+
     @Test
     void findUserProfileByNickname_ExistingNickname_ReturnsOptionalUserProfile() {
         when(userProfileRepository.findByNickname("nickname")).thenReturn(Optional.of(getUserProfile()));
@@ -110,13 +125,15 @@ class UserProfileServiceImplTest {
 
     @Test
     void editUserProfile_ValidUserProfile_ReturnsEditedUserProfile() {
-        when(userProfileRepository.save(getUserProfile())).thenReturn(getUserProfile());
+        UserProfile userProfile = getUserProfile();
+        when(userProfileRepository.save(userProfile)).thenReturn(userProfile);
 
-        UserProfile result = userProfileService.editUserProfile(getUserProfile());
+        UserProfile result = userProfileService.editUserProfile(userProfile);
 
-        assertEquals(getUserProfile(), result);
-        verify(userProfileRepository, times(1)).save(getUserProfile());
+        assertEquals(userProfile, result);
+        verify(userProfileRepository).save(userProfile);
     }
+
     @Test
     void existsByNickname_NicknameExists_ReturnsTrue() {
         String existingNickname = "testNickname";
@@ -135,14 +152,5 @@ class UserProfileServiceImplTest {
         boolean result = userProfileService.existsByNickname(nonExistingNickname);
 
         assertFalse(result);
-    }
-
-
-    private void findById() {
-        userProfileService.findUserProfileById(1L);
-    }
-
-    private void getUserProfileServiceUserProfile() {
-        userProfileService.createUserProfile(getUserProfile());
     }
 }

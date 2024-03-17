@@ -30,6 +30,14 @@ class EditUserProfileUseCaseFacadeTest {
     @InjectMocks
     EditUserProfileUseCaseFacade editUserProfileUseCaseFacade;
 
+    private static UserProfile getUserProfile() {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setId(1L);
+        userProfile.setNickname("nickname");
+        userProfile.setImageLink("imageLink");
+        return userProfile;
+    }
+
     @Test
     void editUserProfile_shouldSuccessReturnUserProfileResponse() {
         UserProfile userProfile = getUserProfile();
@@ -49,9 +57,8 @@ class EditUserProfileUseCaseFacadeTest {
         verify(userProfileToUserProfileResponse, times(1)).map(any());
     }
 
-
     @Test
-    void editUserProfile_shouldThrowExceptionWhenFindUserProfileByNickname(){
+    void editUserProfile_shouldThrowExceptionWhenFindUserProfileByNickname() {
         when(this.currentUserProfileApiService.currentUserProfile()).thenReturn(getUserProfile());
         when(userProfileService.findUserProfileByNickname(anyString())).thenReturn(Optional.empty());
         CustomException customException = assertThrows(CustomException.class, this::editUserProfile);
@@ -61,8 +68,9 @@ class EditUserProfileUseCaseFacadeTest {
         verify(userProfileService, times(1)).findUserProfileByNickname(anyString());
         verify(userProfileToUserProfileResponse, times(0)).map(any());
     }
+
     @Test
-    void editUserProfile_shouldThrowExceptionWhenUserProfilesNotEqual(){
+    void editUserProfile_shouldThrowExceptionWhenUserProfilesNotEqual() {
         UserProfile userProfile = new UserProfile();
         userProfile.setNickname("nickname1");
         userProfile.setId(2L);
@@ -80,13 +88,5 @@ class EditUserProfileUseCaseFacadeTest {
 
     private void editUserProfile() {
         this.editUserProfileUseCaseFacade.editUserProfile("nickname1", new UserProfileRequest("nickname1", "imageLink"));
-    }
-
-    private static UserProfile getUserProfile() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(1L);
-        userProfile.setNickname("nickname");
-        userProfile.setImageLink("imageLink");
-        return userProfile;
     }
 }

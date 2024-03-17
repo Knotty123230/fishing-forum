@@ -22,6 +22,14 @@ class UserProfileToUserProfileResponseImplTest {
     @InjectMocks
     UserProfileToUserProfileResponseImpl userProfileToUserProfileResponse;
 
+    private static UserProfile getUserProfile() {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setId(1L);
+        userProfile.setNickname("nickname");
+        userProfile.setImageLink("imageLink");
+        return userProfile;
+    }
+
     @Test
     void map_shouldReturnUserProfileResponse() {
         UserProfile userProfile = getUserProfile();
@@ -47,14 +55,6 @@ class UserProfileToUserProfileResponseImplTest {
 
     private void mapUserProfile() {
         userProfileToUserProfileResponse.map(getUserProfile());
-    }
-
-    private static UserProfile getUserProfile() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(1L);
-        userProfile.setNickname("nickname");
-        userProfile.setImageLink("imageLink");
-        return userProfile;
     }
 
 }

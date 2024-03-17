@@ -26,8 +26,16 @@ class CurrentUserProfileApiServiceImplTest {
     @InjectMocks
     CurrentUserProfileApiServiceImpl currentUserProfileApiService;
 
+    private static UserProfile getUserProfile() {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setId(1L);
+        userProfile.setImageLink("imageLink");
+        userProfile.setNickname("nickname");
+        return userProfile;
+    }
+
     @Test
-    void currentUserProfile_shouldReturnUserProfile(){
+    void currentUserProfile_shouldReturnUserProfile() {
         CurrentUserApiModel currentUserApiModel = new CurrentUserApiModel(1L);
         UserProfile userProfile = getUserProfile();
         when(identityApiService.currentUserAccount()).thenReturn(Optional.of(currentUserApiModel));
@@ -37,19 +45,11 @@ class CurrentUserProfileApiServiceImplTest {
         verify(identityApiService, times(1)).currentUserAccount();
         verify(userProfileService, times(1)).findUserProfileById(any());
     }
+
     @Test
-    void currentUserProfile_shouldThrowAuthorizationException(){
+    void currentUserProfile_shouldThrowAuthorizationException() {
         when(identityApiService.currentUserAccount()).thenReturn(Optional.empty());
         Assertions.assertThrows(CustomException.class, () -> currentUserProfileApiService.currentUserProfile());
         verify(identityApiService, times(1)).currentUserAccount();
-    }
-
-
-    private static UserProfile getUserProfile() {
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(1L);
-        userProfile.setImageLink("imageLink");
-        userProfile.setNickname("nickname");
-        return userProfile;
     }
 }

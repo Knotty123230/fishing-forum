@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,9 +24,13 @@ class UserProfileRequestToUserProfileMapperImplTest {
     @InjectMocks
     UserProfileRequestToUserProfileMapperImpl userProfileRequestToUserProfileMapper;
 
+    private static UserProfileRequest getUserProfileRequest() {
+        UserProfileRequest nickname = new UserProfileRequest("nickname", "image.url");
+        return nickname;
+    }
 
     @Test
-    void map_shouldReturnUserProfile(){
+    void map_shouldReturnUserProfile() {
         CurrentUserApiModel currentUserApiModel = new CurrentUserApiModel(1L);
 
         when(identityApiService.currentUserAccount()).thenReturn(Optional.of(currentUserApiModel));
@@ -51,12 +56,5 @@ class UserProfileRequestToUserProfileMapperImplTest {
 
     private void mapUserProfileRequest(UserProfileRequest userProfileRequest) {
         userProfileRequestToUserProfileMapper.map(userProfileRequest);
-    }
-
-
-
-    private static UserProfileRequest getUserProfileRequest() {
-        UserProfileRequest nickname = new UserProfileRequest("nickname", "image.url");
-        return nickname;
     }
 }
