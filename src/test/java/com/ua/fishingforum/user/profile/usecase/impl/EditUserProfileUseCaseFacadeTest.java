@@ -42,7 +42,7 @@ class EditUserProfileUseCaseFacadeTest {
     void editUserProfile_shouldSuccessReturnUserProfileResponse() {
         UserProfile userProfile = getUserProfile();
         UserProfileResponse userProfileResponse1 = new UserProfileResponse("nickname1", "imageLink");
-        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1", "imageLink");
+        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1");
 
         when(currentUserProfileApiService.currentUserProfile()).thenReturn(userProfile);
         when(userProfileService.findUserProfileByNickname(userProfile.getNickname())).thenReturn(Optional.of(userProfile));
@@ -50,7 +50,6 @@ class EditUserProfileUseCaseFacadeTest {
 
         UserProfileResponse userProfileResponse = this.editUserProfileUseCaseFacade.editUserProfile("nickname", userProfileRequest);
         assertEquals(userProfileRequest.nickname(), userProfileResponse.nickname());
-        assertEquals(userProfileRequest.imageLink(), userProfileResponse.imageUrl());
 
         verify(this.userProfileService, times(1)).findUserProfileByNickname(anyString());
         verify(currentUserProfileApiService, times(1)).currentUserProfile();
@@ -68,7 +67,6 @@ class EditUserProfileUseCaseFacadeTest {
         verify(userProfileService, times(1)).findUserProfileByNickname(anyString());
         verify(userProfileToUserProfileResponse, times(0)).map(any());
     }
-
     @Test
     void editUserProfile_shouldThrowExceptionWhenUserProfilesNotEqual() {
         UserProfile userProfile = new UserProfile();
@@ -87,6 +85,6 @@ class EditUserProfileUseCaseFacadeTest {
     }
 
     private void editUserProfile() {
-        this.editUserProfileUseCaseFacade.editUserProfile("nickname1", new UserProfileRequest("nickname1", "imageLink"));
+        this.editUserProfileUseCaseFacade.editUserProfile("nickname1", new UserProfileRequest("nickname1"));
     }
 }

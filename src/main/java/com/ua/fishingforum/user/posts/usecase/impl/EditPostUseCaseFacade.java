@@ -31,7 +31,6 @@ public class EditPostUseCaseFacade implements EditPostUseCase {
         Post post = postService.findPostByUserProfileAndId(userProfile, postId).orElseThrow(() -> new CustomException("ви не можете коригувати цей пост"));
         post.setDescription(postRequest.description());
         post.setName(postRequest.name());
-        post.setImageUrl(postRequest.imageUrl());
         return post;
     }
 }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ua.fishingforum.common.constants.MappingConstants.*;
+
 @RestController
 @RequestMapping("/api/v1/user/like")
 @RequiredArgsConstructor
@@ -18,40 +20,40 @@ public class LikesController {
     private final DeletePostLikeUseCase deletePostLikeUseCase;
     private final DeleteCommentLikeUseCase deleteCommentLikeUseCase;
 
-    @PostMapping("/post")
+    @PostMapping(ADD_LIKE_TO_POST_MAPPING)
     @ResponseStatus(HttpStatus.CREATED)
-    public LikeResponse addPostLike(@RequestParam("postId") Long postId) {
+    public LikeResponse addPostLike(@PathVariable Long postId) {
         return addLikeUseCase.addLike(postId);
     }
 
 
-    @GetMapping("/post")
+    @GetMapping(FIND_ALL_POST_LIKES_MAPPING)
     @ResponseStatus(HttpStatus.OK)
-    public AllLikesResponse findAllPostLikes(@RequestParam("postId") Long postId) {
+    public AllLikesResponse findAllPostLikes(@PathVariable Long postId) {
         return allLikesUseCase.findAll(postId);
     }
 
-    @PostMapping("/comment/{id}")
+    @PostMapping(ADD_LIKE_TO_COMMENT_MAPPING)
     @ResponseStatus(HttpStatus.CREATED)
     public LikeResponse addCommentLike(@PathVariable Long id) {
         return this.addCommentLikeUseCase.addCommentLike(id);
     }
 
-    @GetMapping("/comment")
+    @GetMapping(FIND_ALL_COMMENT_LIKES_MAPPING)
     @ResponseStatus(HttpStatus.OK)
-    public AllLikesResponse findAllCommentLikes(@RequestParam("commentId") Long commentId) {
+    public AllLikesResponse findAllCommentLikes(@PathVariable Long commentId) {
         return this.allCommentLikesUseCase.findAllCommentsLikes(commentId);
     }
 
-    @DeleteMapping("/post")
+    @DeleteMapping(DELETE_POST_LIKE_MAPPING)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deletePostLike(@RequestParam("postId") Long postId) {
+    public void deletePostLike(@PathVariable("postId") Long postId) {
         deletePostLikeUseCase.delete(postId);
     }
 
-    @DeleteMapping("/comment")
+    @DeleteMapping(DELETE_COMMENT_LIKE_MAPPING)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteCommentLike(@RequestParam("commentId") Long commentId) {
+    public void deleteCommentLike(@PathVariable Long commentId) {
         this.deleteCommentLikeUseCase.deleteCommentLike(commentId);
     }
 }

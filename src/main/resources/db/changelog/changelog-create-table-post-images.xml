@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="create table post_images" author="Vitaliy">
+        <createTable tableName="post_images" schemaName="forum">
+            <column autoIncrement="true" name="id" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="image_url" type="varchar"/>
+            <column name="created_at" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="table post_images_links"  author="Vitaliy">
+        <createTable schemaName="forum" tableName="post_images_links">
+            <column name="post_id" type="bigint">
+                <constraints foreignKeyName="fk-post-id" referencedTableSchemaName="forum" referencedTableName="user_posts" referencedColumnNames="id"/>
+            </column>
+            <column name="image_id" type="bigint">
+                <constraints foreignKeyName="fk-image-id" referencedTableSchemaName="forum" referencedTableName="post_images" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

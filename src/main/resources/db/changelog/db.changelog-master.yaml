@@ -41,3 +41,16 @@ databaseChangeLog:
   - include:
       file: changelog-add-column-date-to-table-likes.sql
       relativeToChangelogFile: true
+  - include:
+      file: changelog-add-columns-user-account-table.xml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog-edit-table-user-posts-delete-constraint-not-null.xml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog-edit-table-user-profile-delete-constraint-not-null.xml
+      relativeToChangelogFile: true
+
+  - include:
+      file: changelog-create-table-post-images.xml
+      relativeToChangelogFile: true

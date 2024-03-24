@@ -29,7 +29,6 @@ public class EditUserProfileUseCaseFacade implements EditUserProfileUseCase {
             throw new CustomException("корегування чужого профілю заборонено");
         }
         findedUserProfile.setNickname(userProfileRequest.nickname());
-        findedUserProfile.setImageLink(userProfileRequest.imageLink());
         return userProfileToUserProfileResponse.map(findedUserProfile);
     }
 }

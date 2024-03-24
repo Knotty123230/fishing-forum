@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ua.fishingforum.common.constants.MappingConstants.REGISTRATION_MAPPING;
+
 @RestController
 @RequestMapping("/api/v1/accounts")
 @Slf4j
@@ -17,11 +19,10 @@ public class UserAccountController {
     private final RegisterUserAccountUseCase registerUserAccountUseCase;
 
 
-    @PostMapping("/register")
+    @PostMapping(REGISTRATION_MAPPING)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "create account for user", tags = "create account")
     public void registerAccount(@Valid @RequestBody RegisterRequest registerRequest) {
-
         registerUserAccountUseCase.register(registerRequest);
     }
 

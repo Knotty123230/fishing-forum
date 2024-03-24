@@ -19,7 +19,7 @@ public class EditCommentUseCaseFacade implements EditCommentUseCase {
     @Override
     public CommentResponse editComment(Long commentId, String message) {
         Comment comment = commentMapper.map(commentId);
-        comment.setComment(message);
+        comment.setMessage(message);
         Comment createdComment = commentService.create(comment);
         return commentToCommentResponseMapper.map(createdComment);
     }

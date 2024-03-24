@@ -19,6 +19,9 @@ public class UserAccount {
     private String username;
     @Column(nullable = false)
     private String password;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     @ManyToMany
     @JoinTable(
             schema = "users",

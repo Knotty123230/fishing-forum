@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.ua.fishingforum.common.constants.MappingConstants.LOGIN_MAPPING;
+
 @RestController
 @RequestMapping("/api/v1/authentication")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationUseCase authenticationUseCase;
 
-    @PostMapping("/access_token")
+    @PostMapping(LOGIN_MAPPING)
     @Operation(summary = "authorization user by his credentials", tags = "authorization")
     public AccessToken getToken(@Valid @RequestBody LoginRequest loginRequest) {
         return authenticationUseCase.authenticate(loginRequest);

@@ -20,7 +20,6 @@ public class PostRequestToPostMapperImpl implements PostRequestToPostMapper {
         post.setUserProfile(userProfile);
         post.setName(source.name());
         post.setDescription(source.description());
-        post.setImageUrl(source.imageUrl());
         return post;
     }
 }

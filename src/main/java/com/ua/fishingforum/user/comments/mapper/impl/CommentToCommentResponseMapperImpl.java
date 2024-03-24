@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CommentToCommentResponseMapperImpl implements CommentToCommentResponseMapper {
     @Override
     public CommentResponse map(Comment source) {
-        return new CommentResponse(source.getComment(),
+        return new CommentResponse(source.getMessage(),
                 source.getUserProfile().getNickname(),
                 source.getUserProfile().getImageLink(),
                 (long) source.getLikes().size());

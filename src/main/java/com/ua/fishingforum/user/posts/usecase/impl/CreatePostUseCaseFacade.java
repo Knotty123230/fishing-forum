@@ -1,5 +1,6 @@
 package com.ua.fishingforum.user.posts.usecase.impl;
 
+import com.ua.fishingforum.common.service.ImageStorageService;
 import com.ua.fishingforum.user.posts.mapper.PostRequestToPostMapper;
 import com.ua.fishingforum.user.posts.mapper.PostToPostResponseMapper;
 import com.ua.fishingforum.user.posts.model.Post;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class CreatePostUseCaseFacade implements CreatePostUseCase {
     private final PostRequestToPostMapper postRequestToPostMapper;
     private final PostToPostResponseMapper postToPostResponseMapper;
+    private final ImageStorageService imageStorageService;
     private final PostService postService;
 
     @Override

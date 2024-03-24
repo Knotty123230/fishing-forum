@@ -24,7 +24,9 @@ public class Post {
     private Long id;
     private String name;
     private String description;
-    private String imageUrl;
+    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "post_images_links", schema = "forum", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private List<Photo> photos;
     @LastModifiedDate
     private Instant modifiedTimestamp;
     @Column(nullable = false, updatable = false)
@@ -47,10 +49,15 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> comments;
 
-    public Post(String name, String description, String imageUrl) {
+    public Post(String name, String description) {
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+    }
+
+    public Post(String name, String description, List<Photo> photos) {
+        this.name = name;
+        this.description = description;
+        this.photos = photos;
     }
 
     public Post() {

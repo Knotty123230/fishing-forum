@@ -1,7 +1,9 @@
 package com.ua.fishingforum.user.profile.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ua.fishingforum.common.service.ImageStorageService;
 import com.ua.fishingforum.user.profile.usecase.EditUserProfileUseCase;
+import com.ua.fishingforum.user.profile.usecase.UploadUserProfileImageUseCase;
 import com.ua.fishingforum.user.profile.usecase.UserProfileCreateUseCase;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileRequest;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,9 @@ class UserProfileControllerTest {
     UserProfileCreateUseCase userProfileCreateUseCase;
     @MockBean
     EditUserProfileUseCase editUserProfileUseCase;
+    @MockBean
+    UploadUserProfileImageUseCase uploadUserProfileImageUseCase;
+
 
     @Test
     @WithMockUser
@@ -47,14 +52,13 @@ class UserProfileControllerTest {
     }
 
     private static UserProfileRequest getUserProfileRequest() {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1", "imageLink");
-        return userProfileRequest;
+        return new UserProfileRequest("nickname1");
     }
 
     @Test
     @WithMockUser
     void createUserProfile_shouldSuccessCreateUserProfile() throws Exception {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname", "imageLink");
+        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname");
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/user-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))
@@ -65,7 +69,7 @@ class UserProfileControllerTest {
     @Test
     @WithMockUser
     void createUserProfile_shouldFailValidation() throws Exception {
-        UserProfileRequest userProfileRequest = getUserProfileRequest();
+        UserProfileRequest userProfileRequest = new UserProfileRequest("");
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/user-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))
@@ -76,7 +80,7 @@ class UserProfileControllerTest {
     @Test
     @WithMockUser
     void createUserProfile_shouldHandleValidationErrors() throws Exception {
-        UserProfileRequest userProfileRequest = getUserProfileRequest();
+        UserProfileRequest userProfileRequest = new UserProfileRequest("");
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/user-profiles")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userProfileRequest))

@@ -25,9 +25,8 @@ class UserProfileCreateUseCaseFacadeTest {
 
     @Test
     void createUserProfile_shouldSuccessCreateUserProfile() {
-        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1", "imageLink");
+        UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1");
         UserProfile userProfile = new UserProfile();
-        userProfile.setImageLink(userProfileRequest.imageLink());
         userProfile.setId(1L);
         userProfile.setNickname(userProfileRequest.nickname());
 

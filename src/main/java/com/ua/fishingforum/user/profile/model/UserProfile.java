@@ -21,9 +21,9 @@ public class UserProfile {
     @Column(nullable = false)
     private String imageLink;
 
-    public UserProfile(String nickname, String imageLink) {
+    public UserProfile(String nickname, Long id) {
+        this.id = id;
         this.nickname = nickname;
-        this.imageLink = imageLink;
     }
 
     public UserProfile(Long id, String nickname, String imageLink) {

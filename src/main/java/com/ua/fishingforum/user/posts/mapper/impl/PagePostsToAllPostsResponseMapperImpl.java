@@ -18,7 +18,7 @@ public class PagePostsToAllPostsResponseMapperImpl implements PagePostsToAllPost
                 source.stream().map(
                         post -> new PostResponse(post.getName(),
                                 post.getDescription(),
-                                post.getImageUrl(),
+                                post.getPhotos(),
                                 post.getCreatedTimestamp()
                         )).toList()
         );

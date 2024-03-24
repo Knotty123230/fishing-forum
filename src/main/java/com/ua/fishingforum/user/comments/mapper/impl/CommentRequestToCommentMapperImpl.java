@@ -21,7 +21,7 @@ public class CommentRequestToCommentMapperImpl implements CommentRequestToCommen
         UserProfile currentUserProfile = currentUserProfileApiService.currentUserProfile();
         Post post = postService.findPostById(source.postId());
         Comment comment = new Comment();
-        comment.setComment(source.message());
+        comment.setMessage(source.message());
         comment.setPost(post);
         comment.setUserProfile(currentUserProfile);
         return comment;

@@ -21,6 +21,6 @@ public class UserProfileRequestToUserProfileMapperImpl implements UserProfileReq
                         () -> new CustomException("для створення профіля користувач має бути авторизований в системі")
                 );
 
-        return new UserProfile(currentUserApiModel.userAccountId(), source.nickname(), source.imageLink());
+        return new UserProfile(source.nickname(), currentUserApiModel.userAccountId());
     }
 }

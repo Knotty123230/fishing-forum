@@ -25,7 +25,7 @@ class UserProfileRequestToUserProfileMapperImplTest {
     UserProfileRequestToUserProfileMapperImpl userProfileRequestToUserProfileMapper;
 
     private static UserProfileRequest getUserProfileRequest() {
-        UserProfileRequest nickname = new UserProfileRequest("nickname", "image.url");
+        UserProfileRequest nickname = new UserProfileRequest("nickname");
         return nickname;
     }
 
@@ -39,7 +39,6 @@ class UserProfileRequestToUserProfileMapperImplTest {
         UserProfile userProfile = userProfileRequestToUserProfileMapper.map(nickname);
 
         assertEquals(nickname.nickname(), userProfile.getNickname());
-        assertEquals(nickname.imageLink(), userProfile.getImageLink());
         verify(identityApiService, times(1)).currentUserAccount();
     }
 

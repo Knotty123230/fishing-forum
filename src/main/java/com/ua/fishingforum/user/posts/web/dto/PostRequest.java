@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record PostRequest(
         @NotBlank @NotNull String name,
-        @NotNull String description,
-        @NotNull String imageUrl
+        @NotNull String description
 ) {
 }

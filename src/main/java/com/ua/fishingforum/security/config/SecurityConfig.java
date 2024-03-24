@@ -40,10 +40,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/v1/accounts/register").permitAll()
                         .requestMatchers("/api/v1/authentication/access_token",
-                                "/favicon.ico",
+                                "/favicon.ico/**",
                                 "/swagger-ui/**",
                                 "/api/v1/mark/**",
-                                "/v3/api-docs/**").permitAll()
+                                "/v3/api-docs/**",
+                                "/api/v1/files/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)

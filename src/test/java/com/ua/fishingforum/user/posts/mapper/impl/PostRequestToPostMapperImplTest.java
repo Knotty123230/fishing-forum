@@ -24,7 +24,7 @@ class PostRequestToPostMapperImplTest {
     void map_shouldSuccessMap(){
         UserProfile userProfile = new UserProfile();
         when(currentUserProfileApiService.currentUserProfile()).thenReturn(userProfile);
-        PostRequest postRequest = new PostRequest("name", "desc", "imageUrl");
+        PostRequest postRequest = new PostRequest("name", "desc");
         Post map = postRequestToPostMapper.map(postRequest);
         assertNotNull(map);
         assertEquals(map.getName(), postRequest.name());

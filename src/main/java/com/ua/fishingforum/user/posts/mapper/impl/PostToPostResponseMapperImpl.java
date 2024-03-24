@@ -2,7 +2,6 @@ package com.ua.fishingforum.user.posts.mapper.impl;
 
 import com.ua.fishingforum.user.posts.mapper.PostToPostResponseMapper;
 import com.ua.fishingforum.user.posts.model.Post;
-import com.ua.fishingforum.user.posts.service.PostService;
 import com.ua.fishingforum.user.posts.web.dto.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
     public PostResponse map(Post post) {
         return new PostResponse(post.getName(),
                 post.getDescription(),
-                post.getImageUrl(),
+                post.getPhotos(),
                 post.getCreatedTimestamp());
     }
 }

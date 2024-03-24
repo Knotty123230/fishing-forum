@@ -1,7 +1,10 @@
 package com.ua.fishingforum.user.posts.web.dto;
 
-import java.time.Instant;
+import com.ua.fishingforum.user.posts.model.Photo;
 
-public record PostResponse(String name, String description, String imageUrl, Instant createdAt) {
+import java.time.Instant;
+import java.util.List;
+
+public record PostResponse(String name, String description, List<Photo> images, Instant createdAt) {
 
 }

@@ -1,6 +1,7 @@
 package com.ua.fishingforum.security.mapper.impl;
 
 
+import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.security.mapper.RegisterRequestToUserAccountMapper;
 import com.ua.fishingforum.security.model.UserAccount;
 import com.ua.fishingforum.security.model.UserRole;
@@ -24,7 +25,10 @@ public class RegisterRequestToUserAccountMapperImpl implements RegisterRequestTo
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername(registerRequest.username().toLowerCase(Locale.ROOT));
         userAccount.setPassword(this.passwordEncoder.encode(registerRequest.password()));
-        UserRole roleUserNotFound = this.userRoleService.findUserRole().orElseThrow(() -> new RuntimeException("Role user not found"));
+        userAccount.setFirstName(registerRequest.firstName());
+        userAccount.setLastName(registerRequest.lastName());
+        userAccount.setPhoneNumber(registerRequest.phoneNumber());
+        UserRole roleUserNotFound = this.userRoleService.findUserRole().orElseThrow(() -> new CustomException("Role user not found"));
         userAccount.setUserRoles(Set.of(roleUserNotFound));
         return userAccount;
     }

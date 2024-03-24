@@ -1,11 +1,14 @@
 package com.ua.fishingforum.user.posts.mapper.impl;
 
+import com.ua.fishingforum.user.posts.model.Photo;
 import com.ua.fishingforum.user.posts.model.Post;
 import com.ua.fishingforum.user.posts.web.dto.PostResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -15,7 +18,7 @@ class PostToPostResponseMapperImplTest {
 
     @Test
     void map_shouldSuccessMap(){
-        Post post = new Post("name", "desc", "imageUrl");
+        Post post = new Post("name", "desc", List.of(new Photo("image1.jpg")));
         PostResponse postResponse = postToPostResponseMapper.map(post);
         assertNull(postResponse.createdAt());
         assertNotNull(postResponse);

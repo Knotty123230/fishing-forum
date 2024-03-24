@@ -5,6 +5,7 @@ import com.ua.fishingforum.user.posts.model.Post;
 import com.ua.fishingforum.user.posts.repository.PostRepository;
 import com.ua.fishingforum.user.posts.service.PostService;
 import com.ua.fishingforum.user.profile.model.UserProfile;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Override
+    @Transactional
     public Post create(Post post) {
         return postRepository.save(post);
     }

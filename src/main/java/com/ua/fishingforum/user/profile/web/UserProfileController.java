@@ -1,6 +1,8 @@
 package com.ua.fishingforum.user.profile.web;
 
+import com.ua.fishingforum.common.constants.MappingConstants;
 import com.ua.fishingforum.user.profile.usecase.EditUserProfileUseCase;
+import com.ua.fishingforum.user.profile.usecase.UploadUserProfileImageUseCase;
 import com.ua.fishingforum.user.profile.usecase.UserProfileCreateUseCase;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileRequest;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
@@ -14,6 +16,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static com.ua.fishingforum.common.constants.MappingConstants.EDIT_USER_PROFILE_MAPPING;
+
 
 @RestController
 @RequestMapping("/api/v1/user-profiles")
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
     private final UserProfileCreateUseCase userProfileCreateUseCase;
     private final EditUserProfileUseCase editUserProfileUseCase;
+    private final UploadUserProfileImageUseCase uploadUserProfileImageUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,9 +40,14 @@ public class UserProfileController {
         userProfileCreateUseCase.createUserProfile(userProfileRequest);
     }
 
-    @PutMapping("/edit/{nickname}")
+    @PutMapping(EDIT_USER_PROFILE_MAPPING)
     public UserProfileResponse editUserProfile(@PathVariable String nickname, @Valid @RequestBody UserProfileRequest userProfileRequest) {
         return editUserProfileUseCase.editUserProfile(nickname, userProfileRequest);
+    }
+
+    @PutMapping(MappingConstants.UPLOAD_USER_PROFILE_IMAGE)
+    public UserProfileResponse uploadUserProfileImage(@RequestParam("file") MultipartFile multipartFile) {
+        return uploadUserProfileImageUseCase.upload(multipartFile);
     }
 
 }

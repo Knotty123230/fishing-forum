@@ -39,7 +39,6 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 .subject(userDetails.getUsername())
                 .build();
 
-
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 }

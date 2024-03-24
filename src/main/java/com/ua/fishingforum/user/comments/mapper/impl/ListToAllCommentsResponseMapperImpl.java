@@ -15,7 +15,7 @@ public class ListToAllCommentsResponseMapperImpl implements ListToAllCommentsRes
         return new AllCommentsResponse(
                 source.stream()
                         .map(comment -> new CommentResponse(
-                                comment.getComment(),
+                                comment.getMessage(),
                                 comment.getUserProfile().getNickname(),
                                 comment.getUserProfile().getImageLink(),
                                 (long) comment.getLikes().size())
