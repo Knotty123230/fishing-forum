@@ -20,6 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p JOIN FETCH p.userProfile JOIN fetch p.likes WHERE p.userProfile.id != :id")
     Page<Post> findNews(@Param("id") Long id, Pageable pageRequest);
+
     @EntityGraph(attributePaths = {"userProfile", "photos"})
     Optional<Post> findByUserProfileAndId(UserProfile userProfile, Long postId);
 }

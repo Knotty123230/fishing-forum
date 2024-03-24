@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 
 @Entity
-@Table(schema = "forum",name = "post_images")
+@Table(schema = "forum", name = "post_images")
 @Data
 @EntityListeners(value = AuditingEntityListener.class)
 public class Photo {
@@ -22,7 +22,9 @@ public class Photo {
     public Photo(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public Photo(){}
+
+    public Photo() {
+    }
 
     public Photo(String imageUrl, boolean isMainPhoto) {
         this.imageUrl = imageUrl;

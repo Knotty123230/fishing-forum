@@ -19,6 +19,7 @@ public class MappingConstants {
     public static final String DELETE_COMMENT_LIKE_MAPPING = "/comment/{commentId}";
     public static final String LOGIN_MAPPING = "/access_token";
     public static final String REGISTRATION_MAPPING = "/register";
+
     private MappingConstants() {
     }
 }

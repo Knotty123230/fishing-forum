@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FileController {
     private final ImageStorageService imageStorageService;
+
     @GetMapping
-    public byte[] getFile(@RequestParam("imageUrl") String imageUrl){
+    public byte[] getFile(@RequestParam("imageUrl") String imageUrl) {
         return imageStorageService.getImage(imageUrl);
     }
 }

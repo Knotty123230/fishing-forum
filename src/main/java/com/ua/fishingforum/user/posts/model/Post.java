@@ -24,7 +24,7 @@ public class Post {
     private Long id;
     private String name;
     private String description;
-    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "post_images_links", schema = "forum", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<Photo> photos;
     @LastModifiedDate

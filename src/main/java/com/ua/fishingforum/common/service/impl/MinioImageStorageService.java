@@ -43,7 +43,8 @@ public class MinioImageStorageService implements ImageStorageService {
             throw new CustomException("Failed to store image file.", e);
         }
     }
-    public byte[] getImage(String imageUrl){
+
+    public byte[] getImage(String imageUrl) {
         try (InputStream stream =
                      minioClient.getObject(GetObjectArgs
                              .builder()
@@ -57,6 +58,7 @@ public class MinioImageStorageService implements ImageStorageService {
             throw new CustomException("Cant get file from Minio", e);
         }
     }
+
     private String generateFileName(MultipartFile file) {
         return new Date().getTime() + "-" + UUID.randomUUID() + "-" + Objects.requireNonNull(file.getOriginalFilename()).replace(" ", "_");
     }
