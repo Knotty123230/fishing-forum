@@ -3,6 +3,7 @@ package com.ua.fishingforum.user.posts.model;
 import com.ua.fishingforum.marks.model.Mark;
 import com.ua.fishingforum.user.comments.model.Comment;
 import com.ua.fishingforum.user.likes.model.Like;
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class Post {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_images_links", schema = "forum", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
     private List<Photo> photos;
     @LastModifiedDate

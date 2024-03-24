@@ -1,4 +1,4 @@
-package com.ua.fishingforum.user.posts.model;
+package com.ua.fishingforum.user.posts.image.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.ua.fishingforum.user.posts.mapper.impl;
 
-import com.ua.fishingforum.user.posts.model.Photo;
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.posts.model.Post;
 import com.ua.fishingforum.user.posts.web.dto.NewsResponse;
 import org.junit.jupiter.api.Test;
