@@ -3,6 +3,7 @@ package com.ua.fishingforum.user.profile.api.service.impl;
 import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.security.api.model.CurrentUserApiModel;
 import com.ua.fishingforum.security.api.service.IdentityApiService;
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.service.UserProfileService;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +30,7 @@ class CurrentUserProfileApiServiceImplTest {
     private static UserProfile getUserProfile() {
         UserProfile userProfile = new UserProfile();
         userProfile.setId(1L);
-        userProfile.setImageLink("imageLink");
+        userProfile.setImageLink(new Photo("imageLink"));
         userProfile.setNickname("nickname");
         return userProfile;
     }

@@ -5,5 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PhotoService {
     void savePhoto(Photo photo);
+
     Photo uploadPhoto(MultipartFile multipartFile);
 }

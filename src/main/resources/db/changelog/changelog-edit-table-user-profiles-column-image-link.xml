@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="edit user-profiles-table" author="Vitaliy">
+        <dropColumn tableName="user_profiles" schemaName="forum" columnName="image_link"/>
+        <addColumn tableName="user_profiles" schemaName="forum">
+            <column name="image_id" type="bigint">
+                <constraints foreignKeyName="fk-image-profile"
+                             referencedTableName="forum.post_images"
+                             referencedTableSchemaName="forum"
+                             referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -54,3 +54,6 @@ databaseChangeLog:
   - include:
       file: changelog-create-table-post-images.xml
       relativeToChangelogFile: true
+  - include:
+      file: changelog-edit-table-user-profiles-column-image-link.xml
+      relativeToChangelogFile: true

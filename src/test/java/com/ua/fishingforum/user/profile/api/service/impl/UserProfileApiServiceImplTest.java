@@ -1,5 +1,6 @@
 package com.ua.fishingforum.user.profile.api.service.impl;
 
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.service.UserProfileService;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class UserProfileApiServiceImplTest {
     void findUserProfileById_shouldReturnUserProfile() {
         UserProfile userProfile = new UserProfile();
         userProfile.setNickname("nickname");
-        userProfile.setImageLink("imageLink");
+        userProfile.setImageLink(new Photo("imageLink"));
         userProfile.setId(1L);
         when(userProfileService.findUserProfileById(1L)).thenReturn(userProfile);
 

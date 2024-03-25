@@ -25,8 +25,4 @@ public class Photo {
 
     public Photo() {
     }
-
-    public Photo(String imageUrl, boolean isMainPhoto) {
-        this.imageUrl = imageUrl;
-    }
 }

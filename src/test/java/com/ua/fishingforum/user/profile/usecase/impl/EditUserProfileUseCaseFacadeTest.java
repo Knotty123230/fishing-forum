@@ -1,6 +1,7 @@
 package com.ua.fishingforum.user.profile.usecase.impl;
 
 import com.ua.fishingforum.common.exception.CustomException;
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService;
 import com.ua.fishingforum.user.profile.mapper.UserProfileToUserProfileResponse;
 import com.ua.fishingforum.user.profile.model.UserProfile;
@@ -34,14 +35,14 @@ class EditUserProfileUseCaseFacadeTest {
         UserProfile userProfile = new UserProfile();
         userProfile.setId(1L);
         userProfile.setNickname("nickname");
-        userProfile.setImageLink("imageLink");
+        userProfile.setImageLink(new Photo("imageLink"));
         return userProfile;
     }
 
     @Test
     void editUserProfile_shouldSuccessReturnUserProfileResponse() {
         UserProfile userProfile = getUserProfile();
-        UserProfileResponse userProfileResponse1 = new UserProfileResponse("nickname1", "imageLink");
+        UserProfileResponse userProfileResponse1 = new UserProfileResponse("nickname1", new Photo("imageLink"));
         UserProfileRequest userProfileRequest = new UserProfileRequest("nickname1");
 
         when(currentUserProfileApiService.currentUserProfile()).thenReturn(userProfile);
@@ -72,7 +73,7 @@ class EditUserProfileUseCaseFacadeTest {
         UserProfile userProfile = new UserProfile();
         userProfile.setNickname("nickname1");
         userProfile.setId(2L);
-        userProfile.setImageLink("imageLink");
+        userProfile.setImageLink(new Photo("imageLink"));
 
         when(this.currentUserProfileApiService.currentUserProfile()).thenReturn(getUserProfile());
         when(this.userProfileService.findUserProfileByNickname(any())).thenReturn(Optional.of(userProfile));

@@ -1,6 +1,7 @@
 package com.ua.fishingforum.user.profile.service.impl;
 
 import com.ua.fishingforum.common.exception.CustomException;
+import com.ua.fishingforum.user.posts.image.model.Photo;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.repository.UserProfileRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class UserProfileServiceImplTest {
         UserProfile userProfile = new UserProfile();
         userProfile.setId(1L);
         userProfile.setNickname("nickname");
-        userProfile.setImageLink("imageLink");
+        userProfile.setImageLink(new Photo("imageLink"));
         return userProfile;
     }
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PostToPostWithImageResponseMapperImpl implements PostToPostWithImageResponseMapper {
     private final ImageStorageService imageStorageService;
+
     @Override
     public PostResponse map(Post source) {
         return new PostResponse(source.getName(),
