@@ -3,7 +3,11 @@ package com.ua.fishingforum.security.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +15,8 @@ import java.util.Set;
 @Table(schema = "users", name = "user_accounts")
 @Getter
 @Setter
-public class UserAccount {
+@EntityListeners(value = AuditingEntityListener.class)
+public class UserAccount implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +27,11 @@ public class UserAccount {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    @ManyToMany
+
+    @Column(name = "created_at")
+    @CreatedDate
+    private Instant createdAt;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             schema = "users",
             name = "user_accounts_roles",
@@ -33,8 +42,6 @@ public class UserAccount {
                     @JoinColumn(name = "user_role_id", referencedColumnName = "id")
             }
     )
-    @Getter
-    @Setter
     private Set<UserRole> userRoles = new HashSet<>();
 
 }

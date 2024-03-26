@@ -26,9 +26,9 @@ public class PagePostsToAllPostsResponseMapperImpl implements PagePostsToAllPost
                                 post.getDescription(),
                                 post.getPhotos()
                                         .stream()
-                                        .map(photo -> new PhotoResponse(photo.getImageUrl(), photo.getCreatedAt(), imageStorageService.getImage(photo.getImageUrl())))
+                                        .map(photo -> new PhotoResponse(imageStorageService.getImage(photo.getImageUrl()), photo.getCreatedAt()))
                                         .toList(),
-                                post.getCreatedTimestamp()
+                                post.getUserProfile(), post.getCreatedTimestamp()
 
                         )).toList()
         );

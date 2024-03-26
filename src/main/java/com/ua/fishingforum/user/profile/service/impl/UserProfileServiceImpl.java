@@ -5,6 +5,8 @@ import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.repository.UserProfileRepository;
 import com.ua.fishingforum.user.profile.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +17,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     private final UserProfileRepository userProfileRepository;
 
     @Override
+    @CachePut(value = "user-profiles", key = "userProfile.id")
     public void createUserProfile(UserProfile userProfile) {
         if (userProfileRepository.existsById(userProfile.getId())) {
             String errorMessage = "Профіль користувача з таким id %s уже був створений".formatted(userProfile.getId());
@@ -28,6 +31,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
 
     @Override
+    @Cacheable(value = "user-profiles", key = "#userProfileId", unless = "#result == null")
     public UserProfile findUserProfileById(Long userProfileId) {
         return userProfileRepository.findById(userProfileId).orElseThrow(() -> new CustomException("профіля користувача з айді %s не існує".formatted(userProfileId)));
     }
@@ -38,6 +42,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @CachePut(value = "user-profiles", key = "userProfile.id")
     public UserProfile editUserProfile(UserProfile userProfile) {
         return this.userProfileRepository.save(userProfile);
     }

@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
 @Table(schema = "forum", name = "user_profiles")
-public class UserProfile {
+public class UserProfile implements Serializable {
     @Id
     private Long id;
     @Column(nullable = false, unique = true)

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class CreatePostUseCaseFacade implements CreatePostUseCase {
     private final PostRequestToPostMapper postRequestToPostMapper;
     private final PostToPostResponseMapper postToPostResponseMapper;
-    private final ImageStorageService imageStorageService;
     private final PostService postService;
 
     @Override

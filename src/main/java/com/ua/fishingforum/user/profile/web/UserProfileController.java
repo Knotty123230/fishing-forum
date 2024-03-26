@@ -49,5 +49,4 @@ public class UserProfileController {
     public UserProfileResponse uploadUserProfileImage(@RequestParam("file") MultipartFile multipartFile) {
         return uploadUserProfileImageUseCase.upload(multipartFile);
     }
-
 }

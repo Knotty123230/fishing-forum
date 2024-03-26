@@ -10,6 +10,7 @@ import com.ua.fishingforum.user.posts.web.dto.PostRequest;
 import com.ua.fishingforum.user.posts.web.dto.PostResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import static com.ua.fishingforum.common.constants.MappingConstants.*;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:5173")
 public class PostController {
     private final CreatePostUseCase createPostUseCase;
     private final FindAllPostsUseCase findAllPostsUseCase;

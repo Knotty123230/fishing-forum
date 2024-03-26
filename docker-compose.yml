@@ -13,9 +13,19 @@ services:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=password
       - MINIO_DEFAULT_BUCKETS=fishing-forum
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
 networks:
   minionetwork:
     driver: bridge
+
 volumes:
   minio_data:
+    driver: local
+  cache:
     driver: local

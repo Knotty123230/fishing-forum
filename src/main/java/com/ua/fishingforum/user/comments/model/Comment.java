@@ -24,6 +24,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "comment")
     private String message;
     @ManyToOne
     @JoinColumn(name = "user_profile_id")

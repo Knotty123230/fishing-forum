@@ -57,3 +57,6 @@ databaseChangeLog:
   - include:
       file: changelog-edit-table-user-profiles-column-image-link.xml
       relativeToChangelogFile: true
+  - include:
+      file: changelog-edit-user-accounts-table-add-column-date.xml
+      relativeToChangelogFile: true

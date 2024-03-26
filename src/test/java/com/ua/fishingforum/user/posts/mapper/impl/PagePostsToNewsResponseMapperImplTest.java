@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -21,8 +22,8 @@ class PagePostsToNewsResponseMapperImplTest {
     @Test
     void map_shouldSuccessMap(){
         List<Post> posts = List.of(
-                new Post("Post 1", "Description 1", List.of(new Photo("image1.jpg"))),
-                new Post("Post 2", "Description 2", List.of(new Photo("image2.jpg")))
+                new Post("Post 1", "Description 1", Set.of(new Photo("image1.jpg"))),
+                new Post("Post 2", "Description 2", Set.of(new Photo("image2.jpg")))
         );
         Page<Post> page = new PageImpl<>(posts);
         NewsResponse newsResponse = pagePostsToNewsResponseMapper.map(page);

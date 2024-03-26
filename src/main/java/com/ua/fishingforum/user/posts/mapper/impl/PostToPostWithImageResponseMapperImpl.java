@@ -18,8 +18,9 @@ public class PostToPostWithImageResponseMapperImpl implements PostToPostWithImag
         return new PostResponse(source.getName(),
                 source.getDescription(),
                 source.getPhotos().stream()
-                        .map(photo -> new PhotoResponse(photo.getImageUrl(), photo.getCreatedAt(), imageStorageService.getImage(photo.getImageUrl())))
+                        .map(photo -> new PhotoResponse(imageStorageService.getImage(photo.getImageUrl()), photo.getCreatedAt()))
                         .toList(),
+                source.getUserProfile(),
                 source.getCreatedTimestamp());
     }
 }

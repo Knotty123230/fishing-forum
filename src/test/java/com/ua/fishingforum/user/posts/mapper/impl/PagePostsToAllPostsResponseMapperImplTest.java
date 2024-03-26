@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,8 +23,8 @@ class PagePostsToAllPostsResponseMapperImplTest {
     @Test
     void map_ShouldMapPageOfPostsToAllPostsResponse() {
         List<Post> posts = List.of(
-                new Post("Post 1", "Description 1", List.of(new Photo("image1.jpg"))),
-                new Post("Post 2", "Description 2", List.of(new Photo("image2.jpg"))));
+                new Post("Post 1", "Description 1", Set.of(new Photo("image1.jpg"))),
+                new Post("Post 2", "Description 2", Set.of(new Photo("image2.jpg"))));
         Page<Post> page = new PageImpl<>(posts);
 
         AllPostsResponse allPostsResponse = pagePostsToAllPostsResponseMapper.map(page);

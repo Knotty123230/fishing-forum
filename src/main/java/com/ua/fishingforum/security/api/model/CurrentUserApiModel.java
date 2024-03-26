@@ -1,4 +1,6 @@
 package com.ua.fishingforum.security.api.model;
 
-public record CurrentUserApiModel(Long userAccountId) {
+import java.io.Serializable;
+
+public record CurrentUserApiModel(Long userAccountId) implements Serializable {
 }

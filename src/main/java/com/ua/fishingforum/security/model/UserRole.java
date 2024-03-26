@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serializable;
+
 @Entity
 @Table(schema = "users", name = "user_roles")
 @Getter
 @Setter
-public class UserRole implements GrantedAuthority {
+public class UserRole implements GrantedAuthority, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

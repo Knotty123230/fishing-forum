@@ -8,6 +8,7 @@ import com.ua.fishingforum.user.posts.web.dto.AllPostsResponse;
 import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,7 @@ public class FindAllPostsUseCaseFacade implements FindAllPostsUseCase {
     private final PostService postService;
     private final CurrentUserProfileApiService currentUserProfileApiService;
     private final PagePostsToAllPostsResponseMapper pagePostsToAllPostsResponseMapper;
+
 
     @Override
     public AllPostsResponse find(int page, int limit) {

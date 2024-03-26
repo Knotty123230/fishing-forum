@@ -3,9 +3,11 @@ package com.ua.fishingforum.common.service.impl;
 import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.common.service.ImageStorageService;
 import io.minio.GetObjectArgs;
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,18 +46,18 @@ public class MinioImageStorageService implements ImageStorageService {
         }
     }
 
-    public byte[] getImage(String imageUrl) {
-        try (InputStream stream =
-                     minioClient.getObject(GetObjectArgs
-                             .builder()
-                             .bucket(bucketName)
-                             .object(imageUrl)
-                             .build())) {
-            return IOUtils.toByteArray(stream);
-        } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
-                 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
-                 InternalException e) {
-            throw new CustomException("Cant get file from Minio", e);
+    public String getImage(String imageUrl) {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(bucketName)
+                            .object(imageUrl)
+                            .build());
+        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException |
+                 InternalException | InvalidResponseException | NoSuchAlgorithmException |
+                 ServerException | XmlParserException | IOException e) {
+            throw new RuntimeException("Failed to get presigned URL for image: " + imageUrl, e);
         }
     }
 

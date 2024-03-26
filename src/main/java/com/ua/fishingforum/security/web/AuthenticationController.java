@@ -6,16 +6,17 @@ import com.ua.fishingforum.security.web.dto.LoginRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.lang.invoke.StringConcatException;
+import java.util.StringJoiner;
 
 import static com.ua.fishingforum.common.constants.MappingConstants.LOGIN_MAPPING;
 
 @RestController
 @RequestMapping("/api/v1/authentication")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:5173")
 public class AuthenticationController {
     private final AuthenticationUseCase authenticationUseCase;
 

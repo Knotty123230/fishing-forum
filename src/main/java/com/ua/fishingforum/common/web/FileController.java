@@ -15,7 +15,7 @@ public class FileController {
     private final ImageStorageService imageStorageService;
 
     @GetMapping
-    public byte[] getFile(@RequestParam("imageUrl") String imageUrl) {
+    public String getFile(@RequestParam("imageUrl") String imageUrl) {
         return imageStorageService.getImage(imageUrl);
     }
 }

@@ -8,6 +8,9 @@ import com.ua.fishingforum.user.posts.web.dto.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
@@ -15,12 +18,18 @@ public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
 
     @Override
     public PostResponse map(Post post) {
+        List<PhotoResponse> list = new LinkedList<>();
+        if (post.getPhotos() != null){
+            list = post.getPhotos()
+                    .stream()
+                    .filter(it -> it.getImageUrl() != null)
+                    .map(photo -> new PhotoResponse(imageStorageService.getImage(photo.getImageUrl()), photo.getCreatedAt()))
+                    .toList();
+        }
         return new PostResponse(post.getName(),
                 post.getDescription(),
-                post.getPhotos()
-                        .stream()
-                        .map(photo -> new PhotoResponse(photo.getImageUrl(), photo.getCreatedAt(), imageStorageService.getImage(photo.getImageUrl())))
-                        .toList(),
+                list,
+                post.getUserProfile(),
                 post.getCreatedTimestamp());
     }
 }

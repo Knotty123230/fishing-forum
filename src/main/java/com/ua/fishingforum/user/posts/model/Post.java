@@ -12,14 +12,16 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(schema = "forum", name = "user_posts")
 @EntityListeners(value = AuditingEntityListener.class)
 @Data
-public class Post {
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +29,7 @@ public class Post {
     private String description;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_images_links", schema = "forum", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private List<Photo> photos;
+    private Set<Photo> photos;
     @LastModifiedDate
     private Instant modifiedTimestamp;
     @Column(nullable = false, updatable = false)
@@ -48,14 +50,14 @@ public class Post {
     @JoinTable(schema = "forum", name = "user_posts_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<Comment> comments;
+    private Set<Comment> comments;
 
     public Post(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Post(String name, String description, List<Photo> photos) {
+    public Post(String name, String description, Set<Photo> photos) {
         this.name = name;
         this.description = description;
         this.photos = photos;
