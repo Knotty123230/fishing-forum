@@ -23,7 +23,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"posts", "posts-news"}, key = "#post.userProfile.id")
+    @CacheEvict(cacheNames = {"posts", "posts-news"}, key = "#post.userProfile.id")
     public Post create(Post post) {
         return postRepository.save(post);
     }
