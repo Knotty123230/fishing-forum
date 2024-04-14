@@ -12,29 +12,12 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class Oauth2Service implements OAuth2AuthorizedClientService {
     private final UserAccountService userAccountService;
-
-    @Override
-    public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId, String principalName) {
-        return null;
-    }
-
-    @Override
-    public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
-        Result result = extractToken(principal);
-        boolean present = userAccountService.findUserByUsername(result.email()).isPresent();
-        if (present){
-            return;
-        }
-        UserAccount userAccount = getUserAccount(result);
-        userAccountService.createUserAccount(userAccount);
-    }
 
     @NotNull
     private static UserAccount getUserAccount(Result result) {
@@ -57,11 +40,27 @@ public class Oauth2Service implements OAuth2AuthorizedClientService {
         return new Result(idToken, email, givenName, picture);
     }
 
-    private record Result(OidcIdToken idToken, String email, String givenName, String image) {
+    @Override
+    public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId, String principalName) {
+        return null;
+    }
+
+    @Override
+    public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
+        Result result = extractToken(principal);
+        boolean present = userAccountService.findUserByUsername(result.email()).isPresent();
+        if (present) {
+            return;
+        }
+        UserAccount userAccount = getUserAccount(result);
+        userAccountService.createUserAccount(userAccount);
     }
 
     @Override
     public void removeAuthorizedClient(String clientRegistrationId, String principalName) {
 
+    }
+
+    private record Result(OidcIdToken idToken, String email, String givenName, String image) {
     }
 }
