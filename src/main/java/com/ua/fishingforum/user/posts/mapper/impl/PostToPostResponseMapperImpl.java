@@ -19,7 +19,7 @@ public class PostToPostResponseMapperImpl implements PostToPostResponseMapper {
     @Override
     public PostResponse map(Post post) {
         List<PhotoResponse> list = new LinkedList<>();
-        if (post.getPhotos() != null){
+        if (post.getPhotos() != null) {
             list = post.getPhotos()
                     .stream()
                     .filter(it -> it.getImageUrl() != null)

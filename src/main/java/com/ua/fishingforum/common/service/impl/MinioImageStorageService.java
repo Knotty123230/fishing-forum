@@ -2,14 +2,12 @@ package com.ua.fishingforum.common.service.impl;
 
 import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.common.service.ImageStorageService;
-import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

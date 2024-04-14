@@ -1,7 +1,5 @@
 package com.ua.fishingforum.user.posts.image.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ua.fishingforum.user.posts.model.Post;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.ua.fishingforum.security.service.impl.Oauth2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,32 +25,56 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import java.util.UUID;
+
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    public static final String REGISTER = "/api/v1/accounts/register";
+    public static final String AUTHENTICATION_ACCESS_TOKEN = "/api/v1/authentication/access_token";
+    public static final String FAVICON_ICO = "/favicon.ico";
+    public static final String SWAGGER_UI = "/swagger-ui/**";
+    public static final String API_DOCS = "/v3/api-docs/**";
     private final RsaKeys rsaKeys;
+    private final Oauth2Service customOauth2service;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true)
+                        .expiredUrl("/login?session=expired")
+                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/v1/accounts/register").permitAll()
-                        .requestMatchers("/api/v1/authentication/access_token",
-                                "/favicon.ico/**",
-                                "/swagger-ui/**",
-                                "/api/v1/mark/**",
-                                "/v3/api-docs/**",
-                                "/api/v1/files/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, REGISTER).permitAll()
+                        .requestMatchers(
+                                AUTHENTICATION_ACCESS_TOKEN,
+                                FAVICON_ICO,
+                                SWAGGER_UI,
+                                API_DOCS,
+                                "/callback/**",
+                                "/login/**",
+                                "/logout",
+                                "/oauth2/**", "/error/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.decoder(jwtDecoder())));
+                .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.decoder(jwtDecoder())))
+                .oauth2Login(it -> it.defaultSuccessUrl("/", true)
+                        .authorizedClientService(this.customOauth2service));
         return http.build();
+    }
+
+    @Bean
+    HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
 

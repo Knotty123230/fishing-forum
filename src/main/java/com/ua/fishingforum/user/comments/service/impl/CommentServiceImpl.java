@@ -5,6 +5,7 @@ import com.ua.fishingforum.user.comments.model.Comment;
 import com.ua.fishingforum.user.comments.repository.CommentRepository;
 import com.ua.fishingforum.user.comments.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(() -> new CustomException("коментарій з таким айді: %s не знайдено".formatted(commentId)));
+        return commentRepository.findById(commentId).orElseThrow(() ->
+                new CustomException("коментарій з таким айді: %s не знайдено".formatted(commentId)));
     }
 
     @Override
@@ -31,11 +33,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Cacheable(value = "comments-by-date", key = "#postId")
     public List<Comment> findAllCommentsByPostIdAndOrderByDate(Long postId) {
         return this.commentRepository.findByPostIdOrderByCreatedTimestamp(postId);
     }
 
     @Override
+    @Cacheable(value = "comments-by-likes", key = "#postId")
     public Optional<List<Comment>> findAllCommentsByPostIdAndOrderByLikes(Long postId) {
         return this.commentRepository.findByPostIdOrderByLikes(postId);
     }

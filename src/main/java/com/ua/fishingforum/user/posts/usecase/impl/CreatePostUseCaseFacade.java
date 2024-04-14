@@ -1,6 +1,5 @@
 package com.ua.fishingforum.user.posts.usecase.impl;
 
-import com.ua.fishingforum.common.service.ImageStorageService;
 import com.ua.fishingforum.user.posts.mapper.PostRequestToPostMapper;
 import com.ua.fishingforum.user.posts.mapper.PostToPostResponseMapper;
 import com.ua.fishingforum.user.posts.model.Post;

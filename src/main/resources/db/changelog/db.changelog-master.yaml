@@ -60,3 +60,6 @@ databaseChangeLog:
   - include:
       file: changelog-edit-user-accounts-table-add-column-date.xml
       relativeToChangelogFile: true
+  - include:
+      file: changelog-drop-constraint-password-not-null.xml
+      relativeToChangelogFile: true

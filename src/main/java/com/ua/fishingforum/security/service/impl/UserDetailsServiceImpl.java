@@ -1,6 +1,5 @@
 package com.ua.fishingforum.security.service.impl;
 
-import com.ua.fishingforum.security.mapper.UserAccountToUserMapper;
 import com.ua.fishingforum.security.service.UserAccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,10 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserAccountService userAccountService;
-    private final UserAccountToUserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         return this.userAccountService.findUserByUsername(username)
-                .map(this.userMapper::map)
                 .orElseThrow(() -> new UsernameNotFoundException("bad credentials"));
     }
 }

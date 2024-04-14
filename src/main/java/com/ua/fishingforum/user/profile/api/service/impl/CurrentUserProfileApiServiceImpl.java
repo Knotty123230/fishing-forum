@@ -8,7 +8,6 @@ import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service

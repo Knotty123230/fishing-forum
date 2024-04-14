@@ -25,28 +25,45 @@ public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String description;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "post_images_links", schema = "forum", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "image_id"))
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "post_images_links",
+            schema = "forum",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
     private Set<Photo> photos;
+
     @LastModifiedDate
     private Instant modifiedTimestamp;
+
     @Column(nullable = false, updatable = false)
     @CreatedDate
     private Instant createdTimestamp;
+
     @ManyToOne
     @ToString.Exclude
     private UserProfile userProfile;
+
     @ManyToOne
     @ToString.Exclude
     private Mark mark;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "post_likes",
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "post_likes",
             joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "like_id"), schema = "forum")
+            inverseJoinColumns = @JoinColumn(name = "like_id"),
+            schema = "forum"
+    )
     private List<Like> likes;
-    @OneToMany(fetch = FetchType.LAZY)
+
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "forum", name = "user_posts_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))

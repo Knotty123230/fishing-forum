@@ -5,7 +5,6 @@ import com.ua.fishingforum.security.api.model.CurrentUserApiModel;
 import com.ua.fishingforum.security.api.service.IdentityApiService;
 import com.ua.fishingforum.security.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

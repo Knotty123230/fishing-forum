@@ -5,6 +5,7 @@ import com.ua.fishingforum.marks.mapper.MarkToMarkResponseMapper;
 import com.ua.fishingforum.marks.model.Mark;
 import com.ua.fishingforum.marks.usecase.FindMarkUseCase;
 import com.ua.fishingforum.marks.util.GoogleApiUtil;
+import com.ua.fishingforum.marks.util.UrlUtils;
 import com.ua.fishingforum.marks.web.dto.Geoposition;
 import com.ua.fishingforum.marks.web.dto.MarkResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class FindMarkUseCaseFacade implements FindMarkUseCase {
 
     @Override
     public MarkResponse find(String address) {
-        Geoposition geoposition = googleApiUtil.getGeoposition(address);
+        String validateAddress = UrlUtils.validateParam(address);
+        Geoposition geoposition = googleApiUtil.getGeoposition(validateAddress);
         Set<Mark> marks = this.geopositionToMarkMapper.map(geoposition);
-
         return this.markToMarkResponseMapper.map(marks);
     }
 }

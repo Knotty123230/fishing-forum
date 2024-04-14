@@ -1,5 +1,6 @@
 package com.ua.fishingforum.security.service.impl;
 
+import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.security.service.AccessTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,7 +27,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 .filter(UserDetails.class::isInstance)
                 .map(UserDetails.class::cast)
                 .orElseThrow(() ->
-                        new RuntimeException("не вдалось сформувати об'єкт UserDetails з об'єкта Authentication"));
+                        new CustomException("не вдалось сформувати об'єкт UserDetails з об'єкта Authentication"));
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

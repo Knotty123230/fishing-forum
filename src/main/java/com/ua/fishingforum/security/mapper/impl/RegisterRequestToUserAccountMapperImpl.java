@@ -28,7 +28,8 @@ public class RegisterRequestToUserAccountMapperImpl implements RegisterRequestTo
         userAccount.setFirstName(registerRequest.firstName());
         userAccount.setLastName(registerRequest.lastName());
         userAccount.setPhoneNumber(registerRequest.phoneNumber());
-        UserRole roleUserNotFound = this.userRoleService.findUserRole().orElseThrow(() -> new CustomException("Role user not found"));
+        UserRole roleUserNotFound = this.userRoleService.findUserRole().orElseThrow(() ->
+                new CustomException("Role user not found"));
         userAccount.setUserRoles(Set.of(roleUserNotFound));
         return userAccount;
     }

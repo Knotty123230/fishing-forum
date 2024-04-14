@@ -2,7 +2,6 @@ package com.ua.fishingforum.user.profile.service;
 
 
 import com.ua.fishingforum.user.profile.model.UserProfile;
-import org.springframework.cache.annotation.CachePut;
 
 import java.util.Optional;
 

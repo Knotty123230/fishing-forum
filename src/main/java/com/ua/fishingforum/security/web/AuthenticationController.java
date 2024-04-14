@@ -8,9 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.invoke.StringConcatException;
-import java.util.StringJoiner;
-
 import static com.ua.fishingforum.common.constants.MappingConstants.LOGIN_MAPPING;
 
 @RestController

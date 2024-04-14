@@ -10,7 +10,6 @@ import com.ua.fishingforum.user.posts.web.dto.PostRequest;
 import com.ua.fishingforum.user.posts.web.dto.PostResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +35,6 @@ public class PostController {
     public PostResponse uploadImage(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long postId) {
         return uploadPostImageUseCase.upload(multipartFile, postId);
     }
-
 
     @GetMapping(ALL_POSTS_FOR_CURRENT_USER_MAPPING)
     public AllPostsResponse findAllPosts(@RequestParam("page") int page, @RequestParam("limit") int limit) {

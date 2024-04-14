@@ -2,7 +2,6 @@ package com.ua.fishingforum.marks.web;
 
 import com.ua.fishingforum.marks.usecase.CreateMarkUseCase;
 import com.ua.fishingforum.marks.usecase.FindMarkUseCase;
-import com.ua.fishingforum.marks.util.UrlUtils;
 import com.ua.fishingforum.marks.web.dto.CreatedMarkResponse;
 import com.ua.fishingforum.marks.web.dto.MarkRequest;
 import com.ua.fishingforum.marks.web.dto.MarkResponse;
@@ -19,8 +18,7 @@ public class MarksController {
 
     @GetMapping
     public MarkResponse find(@RequestParam("address") String address) {
-        String validateAddress = UrlUtils.validateParam(address);
-        return findMarkUseCase.find(validateAddress);
+        return findMarkUseCase.find(address);
     }
 
     @PostMapping

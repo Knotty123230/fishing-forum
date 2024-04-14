@@ -15,11 +15,13 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p JOIN FETCH p.userProfile LEFT JOIN FETCH p.likes LEFT JOIN FETCH p.photos where p.userProfile.id != :id")
     Page<Post> findAll(@Param("id") Long currentUserProfileId, Pageable pageable);
+
     @EntityGraph(attributePaths = {"photos", "userProfile"})
     Page<Post> findAllPostsByUserProfileId(@Param("id") Long id, PageRequest pageRequest);
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.userProfile JOIN fetch p.likes WHERE p.userProfile.id != :id")
+    @Query("SELECT p FROM Post p left JOIN fetch p.likes left join p.photos WHERE p.userProfile.id != :id")
     Page<Post> findNews(@Param("id") Long id, Pageable pageRequest);
+
 
     @EntityGraph(attributePaths = {"userProfile", "photos"})
     Optional<Post> findByUserProfileAndId(UserProfile userProfile, Long postId);

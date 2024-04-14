@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(schema = "users", name = "user_roles")
@@ -16,6 +17,18 @@ public class UserRole implements GrantedAuthority, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String authority;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            schema = "users",
+            name = "user_accounts_roles",
+            joinColumns = {
+                    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "user_account_id", referencedColumnName = "id")
+            }
+    )
+    private Set<UserAccount> userAccount;
 
     @Override
     public String getAuthority() {

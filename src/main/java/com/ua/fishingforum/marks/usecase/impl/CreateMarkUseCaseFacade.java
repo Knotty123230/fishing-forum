@@ -1,5 +1,6 @@
 package com.ua.fishingforum.marks.usecase.impl;
 
+import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.marks.mapper.CreatedMarkToMarkResponseMapper;
 import com.ua.fishingforum.marks.mapper.MarkRequestToMarkMapper;
 import com.ua.fishingforum.marks.model.Mark;
@@ -24,7 +25,7 @@ public class CreateMarkUseCaseFacade implements CreateMarkUseCase {
     public CreatedMarkResponse create(MarkRequest markRequest) {
         boolean exists = markService.existsByLatAndLng(markRequest.lat(), markRequest.lng());
         if (exists) {
-            throw new RuntimeException("Mark already exists");
+            throw new CustomException("Mark already exists");
         }
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
         Mark mark = this.markRequestToMarkMapper.map(markRequest);

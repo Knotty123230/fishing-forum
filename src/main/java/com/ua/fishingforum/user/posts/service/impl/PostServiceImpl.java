@@ -8,7 +8,6 @@ import com.ua.fishingforum.user.profile.model.UserProfile;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = {"posts", "posts-news"}, key = "#post.userProfile.id")
+    @CacheEvict(value = {"posts", "posts-news", "posts-for-curr-user"}, allEntries = true)
     public Post create(Post post) {
         return postRepository.save(post);
     }
@@ -35,22 +34,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Cacheable(value = "posts", key = "#id")
-    public Page<Post> findAllPostsForCurrentUser(Long id, PageRequest pageRequest) {
-        return postRepository.findAllPostsByUserProfileId(id, pageRequest);
+    @Cacheable(value = "posts-for-curr-user", key = "#userProfileId")
+    public Page<Post> findAllPostsForCurrentUser(Long userProfileId, PageRequest pageRequest) {
+        return postRepository.findAllPostsByUserProfileId(userProfileId, pageRequest);
     }
 
     @Override
-    @Cacheable(value = "posts-news", key = "#id")
-    public Page<Post> findAllNews(Long id, PageRequest pageRequest) {
-        return postRepository.findNews(id, pageRequest);
+    @Cacheable(value = "posts-news", key = "#userProfileId")
+    public Page<Post> findAllNews(Long userProfileId, PageRequest pageRequest) {
+        return postRepository.findNews(userProfileId, pageRequest);
     }
 
     @Override
-    @CacheEvict(value = "posts", key = "#id")
-    @Cacheable(value = "posts", key = "#id")
-    public Page<Post> findAll(Long id, PageRequest pageRequest) {
-        return this.postRepository.findAll(id, pageRequest);
+    @Cacheable(value = "posts", key = "#userProfileId")
+    public Page<Post> findAll(Long userProfileId, PageRequest pageRequest) {
+        return this.postRepository.findAll(userProfileId, pageRequest);
     }
 
     @Override
