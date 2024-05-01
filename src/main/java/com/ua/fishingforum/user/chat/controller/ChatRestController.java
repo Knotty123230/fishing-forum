@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatRestController {
-    private final ChatUseCase chatUseCase;
     private static final String CHAT_CREATE_MAPPING = "/create";
+    private final ChatUseCase chatUseCase;
+
     @PostMapping(CHAT_CREATE_MAPPING)
-    public ChatResponse createChat(@RequestBody ChatRequest chatRequest){
+    public ChatResponse createChat(@RequestBody ChatRequest chatRequest) {
         return chatUseCase.createChat(chatRequest);
     }
 }

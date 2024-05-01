@@ -1,6 +1,5 @@
 package com.ua.fishingforum.user.chat.controller.dto;
 
-import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
 
 public record MessageResponse(

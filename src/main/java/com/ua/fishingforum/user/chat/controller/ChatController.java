@@ -18,15 +18,14 @@ import org.springframework.stereotype.Controller;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
     public static final String CHAT_FETCH_SUBSCRIBE = "/chat/{chatId}/join";
     public static final String CHAT_FETCH_MESSAGE = "/chat/{chatId}/message";
-    private static final String EXCEPTION_MESSAGE = "чат з айді %s не знайдено";
     public static final String FETCH_ALL_CHAT_MESSAGES = "/chat/{chatId}/messages";
+    private static final String EXCEPTION_MESSAGE = "чат з айді %s не знайдено";
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatService chatService;
     private final CurrentUserProfileApiService currentUserProfileApiService;
@@ -72,6 +71,7 @@ public class ChatController {
                         )
                 ));
     }
+
     @SubscribeMapping(FETCH_ALL_CHAT_MESSAGES)
     public void fetchSubscribeOnChatMessages(@DestinationVariable("chatId") Long chatId) {
         Chat chat = chatService.findChatById(chatId)

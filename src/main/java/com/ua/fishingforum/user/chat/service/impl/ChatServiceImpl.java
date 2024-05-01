@@ -12,6 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
+
     @Override
     public Chat createChat(Chat chat) {
         return chatRepository.save(chat);

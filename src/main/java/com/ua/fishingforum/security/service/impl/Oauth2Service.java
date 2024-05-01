@@ -41,10 +41,8 @@ public class Oauth2Service implements OAuth2AuthorizedClientService {
         // TODO:  remove authorized client
     }
 
-    private record Result(OidcIdToken idToken, String email, String givenName, String image) {
-    }
     @NotNull
-    private  UserAccount getUserAccount(Result result) {
+    private UserAccount getUserAccount(Result result) {
         UserAccount userAccount = new UserAccount();
         userAccount.setUsername(result.email());
         userAccount.setFirstName(result.givenName());
@@ -62,5 +60,8 @@ public class Oauth2Service implements OAuth2AuthorizedClientService {
         String givenName = idToken.getGivenName();
         String picture = idToken.getPicture();
         return new Result(idToken, email, givenName, picture);
+    }
+
+    private record Result(OidcIdToken idToken, String email, String givenName, String image) {
     }
 }

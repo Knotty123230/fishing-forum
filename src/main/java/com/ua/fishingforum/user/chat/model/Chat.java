@@ -39,10 +39,10 @@ public class Chat {
             (
                     name = "chat_id", referencedColumnName = "id"
             ),
-    inverseJoinColumns = @JoinColumn
-            (
-                    name = "message_id", referencedColumnName = "id", unique = true
-            ))
+            inverseJoinColumns = @JoinColumn
+                    (
+                            name = "message_id", referencedColumnName = "id", unique = true
+                    ))
     private List<Message> messages;
     @CreatedDate
     private Instant createdAt;
