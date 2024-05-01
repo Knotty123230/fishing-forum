@@ -37,7 +37,8 @@ public class MinioImageStorageService implements ImageStorageService {
                             .bucket(bucketName)
                             .object(fileName).stream(is, file.getSize(), -1)
                             .contentType(file.getContentType())
-                            .build());
+                            .build()
+            );
             return fileName;
         } catch (Exception e) {
             throw new CustomException("Failed to store image file.", e);

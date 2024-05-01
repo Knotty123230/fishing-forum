@@ -1,5 +1,6 @@
 package com.ua.fishingforum.security.service.impl;
 
+import com.ua.fishingforum.common.exception.CustomException;
 import com.ua.fishingforum.security.service.UserAccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return this.userAccountService.findUserByUsername(username)
+                .filter(user -> {
+                    if (user.getPassword() == null) {
+                        throw new CustomException("юзер з даною поштою %s автентифікований з допомогою стороннього сервісу".formatted(username));
+                    }
+                    return true;
+                })
                 .orElseThrow(() -> new UsernameNotFoundException("bad credentials"));
     }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="messages-table" author="Vitaliy">
+        <createTable tableName="messages" schemaName="forum">
+            <column type="serial" autoIncrement="true" name="id">
+                <constraints primaryKey="true"/>
+            </column>
+            <column type="varchar(5000)" name="content">
+                <constraints nullable="false"/>
+            </column>
+            <column type="datetime" name="created_at" >
+                <constraints nullable="false"/>
+            </column>
+            <column type="bigint" name="from-user-profile">
+                <constraints foreignKeyName="message-user-profile__fk" referencedTableName="user_profiles"
+                             referencedColumnNames="id" referencedTableSchemaName="forum"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="chat-table" author="Vitaliy">
+        <createTable tableName="chats" schemaName="forum">
+            <column type="serial" autoIncrement="true" name="id">
+                <constraints primaryKey="true"/>
+            </column>
+            <column type="datetime" name="created_at" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)"/>
+        </createTable>
+        <createTable tableName="chats_user-profiles" schemaName="forum">
+            <column type="bigint" name="chat_id">
+                <constraints foreignKeyName="chats_user-profiles__fk" referencedTableName="chats"
+                             referencedTableSchemaName="forum" referencedColumnNames="id"/>
+            </column>
+            <column type="bigint" name="user_profile_id">
+                <constraints foreignKeyName="user_profile_chat__fk" referencedColumnNames="id"
+                             referencedTableSchemaName="forum" referencedTableName="user_profiles"/>
+            </column>
+        </createTable>
+        <createTable tableName="chats_messages" schemaName="forum">
+            <column type="bigint" name="chat_id">
+                <constraints foreignKeyName="fk_chats-messages" referencedTableName="chats" referencedColumnNames="id"
+                             referencedTableSchemaName="forum"/>
+            </column>
+            <column name="message_id" type="bigint">
+                <constraints foreignKeyName="fk_messages-chats" referencedTableSchemaName="forum"
+                             referencedColumnNames="id" referencedTableName="messages"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

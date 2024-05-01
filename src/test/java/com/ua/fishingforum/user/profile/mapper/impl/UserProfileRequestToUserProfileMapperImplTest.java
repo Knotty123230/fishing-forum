@@ -25,8 +25,7 @@ class UserProfileRequestToUserProfileMapperImplTest {
     UserProfileRequestToUserProfileMapperImpl userProfileRequestToUserProfileMapper;
 
     private static UserProfileRequest getUserProfileRequest() {
-        UserProfileRequest nickname = new UserProfileRequest("nickname");
-        return nickname;
+        return new UserProfileRequest("nickname");
     }
 
     @Test

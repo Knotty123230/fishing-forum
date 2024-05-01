@@ -63,3 +63,6 @@ databaseChangeLog:
   - include:
       file: changelog-drop-constraint-password-not-null.xml
       relativeToChangelogFile: true
+  - include:
+      file: changelog-create-message-table-and-chat-table.xml
+      relativeToChangelogFile: true

@@ -19,29 +19,9 @@ import java.util.Set;
 public class Oauth2Service implements OAuth2AuthorizedClientService {
     private final UserAccountService userAccountService;
 
-    @NotNull
-    private static UserAccount getUserAccount(Result result) {
-        UserAccount userAccount = new UserAccount();
-        userAccount.setUsername(result.email());
-        userAccount.setFirstName(result.givenName());
-        UserRole userRole = new UserRole();
-        userRole.setAuthority("ROLE_USER");
-        userAccount.setUserRoles(Set.of(userRole));
-        return userAccount;
-    }
-
-    @NotNull
-    private static Result extractToken(Authentication principal) {
-        DefaultOidcUser principal1 = (DefaultOidcUser) principal.getPrincipal();
-        OidcIdToken idToken = principal1.getIdToken();
-        String email = idToken.getEmail();
-        String givenName = idToken.getGivenName();
-        String picture = idToken.getPicture();
-        return new Result(idToken, email, givenName, picture);
-    }
-
     @Override
     public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId, String principalName) {
+        // TODO: generate loading client
         return null;
     }
 
@@ -58,9 +38,29 @@ public class Oauth2Service implements OAuth2AuthorizedClientService {
 
     @Override
     public void removeAuthorizedClient(String clientRegistrationId, String principalName) {
-
+        // TODO:  remove authorized client
     }
 
     private record Result(OidcIdToken idToken, String email, String givenName, String image) {
+    }
+    @NotNull
+    private  UserAccount getUserAccount(Result result) {
+        UserAccount userAccount = new UserAccount();
+        userAccount.setUsername(result.email());
+        userAccount.setFirstName(result.givenName());
+        UserRole userRole = new UserRole();
+        userRole.setAuthority("ROLE_USER");
+        userAccount.setUserRoles(Set.of(userRole));
+        return userAccount;
+    }
+
+    @NotNull
+    private Result extractToken(Authentication principal) {
+        DefaultOidcUser principal1 = (DefaultOidcUser) principal.getPrincipal();
+        OidcIdToken idToken = principal1.getIdToken();
+        String email = idToken.getEmail();
+        String givenName = idToken.getGivenName();
+        String picture = idToken.getPicture();
+        return new Result(idToken, email, givenName, picture);
     }
 }
