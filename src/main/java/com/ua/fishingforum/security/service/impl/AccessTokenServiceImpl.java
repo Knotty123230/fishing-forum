@@ -1,6 +1,7 @@
 package com.ua.fishingforum.security.service.impl;
 
 import com.ua.fishingforum.common.exception.CustomException;
+import com.ua.fishingforum.security.model.UserAccount;
 import com.ua.fishingforum.security.service.AccessTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -33,13 +34,16 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+        UserAccount principal = (UserAccount) authentication.getPrincipal();
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
                 .claim("scope", roles)
+                .claim("username", principal.getUsername())
+                .claim("name", principal.getFirstName())
+                .claim("lastName", principal.getLastName())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plus(1, ChronoUnit.DAYS))
                 .subject(userDetails.getUsername())
                 .build();
-
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 }

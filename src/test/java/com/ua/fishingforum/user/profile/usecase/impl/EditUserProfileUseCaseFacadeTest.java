@@ -68,6 +68,7 @@ class EditUserProfileUseCaseFacadeTest {
         verify(userProfileService, times(1)).findUserProfileByNickname(anyString());
         verify(userProfileToUserProfileResponse, times(0)).map(any());
     }
+
     @Test
     void editUserProfile_shouldThrowExceptionWhenUserProfilesNotEqual() {
         UserProfile userProfile = new UserProfile();

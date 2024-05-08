@@ -1,4 +1,4 @@
-package com.ua.fishingforum.user.chat.controller.dto;
+package com.ua.fishingforum.user.chat.web.controller.dto;
 
 import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
 

@@ -1,7 +1,6 @@
 package com.ua.fishingforum.user.profile.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ua.fishingforum.common.service.ImageStorageService;
 import com.ua.fishingforum.user.profile.usecase.EditUserProfileUseCase;
 import com.ua.fishingforum.user.profile.usecase.UploadUserProfileImageUseCase;
 import com.ua.fishingforum.user.profile.usecase.UserProfileCreateUseCase;
@@ -38,6 +37,9 @@ class UserProfileControllerTest {
     @MockBean
     UploadUserProfileImageUseCase uploadUserProfileImageUseCase;
 
+    private static UserProfileRequest getUserProfileRequest() {
+        return new UserProfileRequest("nickname1");
+    }
 
     @Test
     @WithMockUser
@@ -51,10 +53,6 @@ class UserProfileControllerTest {
         perform.andExpect(status().is2xxSuccessful());
     }
 
-    private static UserProfileRequest getUserProfileRequest() {
-        return new UserProfileRequest("nickname1");
-    }
-
     @Test
     @WithMockUser
     void createUserProfile_shouldSuccessCreateUserProfile() throws Exception {
@@ -66,6 +64,7 @@ class UserProfileControllerTest {
         ResultActions perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().isCreated());
     }
+
     @Test
     @WithMockUser
     void createUserProfile_shouldFailValidation() throws Exception {
@@ -77,6 +76,7 @@ class UserProfileControllerTest {
         ResultActions perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().isBadRequest());
     }
+
     @Test
     @WithMockUser
     void createUserProfile_shouldHandleValidationErrors() throws Exception {

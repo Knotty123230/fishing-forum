@@ -10,7 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,7 +22,7 @@ class PostRequestToPostMapperImplTest {
     CurrentUserProfileApiService currentUserProfileApiService;
 
     @Test
-    void map_shouldSuccessMap(){
+    void map_shouldSuccessMap() {
         UserProfile userProfile = new UserProfile();
         when(currentUserProfileApiService.currentUserProfile()).thenReturn(userProfile);
         PostRequest postRequest = new PostRequest("name", "desc");

@@ -49,9 +49,6 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
-                        .expiredUrl("/login?session=expired")
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, REGISTER).permitAll()
@@ -63,7 +60,8 @@ public class SecurityConfig {
                                 "/callback/**",
                                 "/login/**",
                                 "/logout",
-                                "/oauth2/**", "/error/*").permitAll()
+                                "/oauth2/**",
+                                "/error/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

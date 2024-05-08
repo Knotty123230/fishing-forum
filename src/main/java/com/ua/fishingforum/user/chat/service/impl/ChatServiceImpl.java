@@ -3,6 +3,7 @@ package com.ua.fishingforum.user.chat.service.impl;
 import com.ua.fishingforum.user.chat.model.Chat;
 import com.ua.fishingforum.user.chat.repository.ChatRepository;
 import com.ua.fishingforum.user.chat.service.ChatService;
+import com.ua.fishingforum.user.profile.model.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,21 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Optional<Chat> findChatById(Long chatId) {
         return chatRepository.findById(chatId);
+    }
+
+    @Override
+    public void addMemberToChat(Chat chat, UserProfile currentUserProfile) {
+        chat.getMembers()
+                .add(currentUserProfile);
+    }
+
+    @Override
+    public Chat updateChat(Chat chat) {
+        return chatRepository.saveAndFlush(chat);
+    }
+
+    @Override
+    public Optional<Chat> findChatByName(String chatName) {
+        return chatRepository.findByName(chatName);
     }
 }

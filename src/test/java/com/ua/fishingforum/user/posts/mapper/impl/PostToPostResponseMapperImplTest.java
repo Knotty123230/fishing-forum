@@ -8,17 +8,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 @ExtendWith(MockitoExtension.class)
 class PostToPostResponseMapperImplTest {
     @InjectMocks
     PostToPostResponseMapperImpl postToPostResponseMapper;
 
     @Test
-    void map_shouldSuccessMap(){
+    void map_shouldSuccessMap() {
         Post post = new Post("name", "desc", Set.of(new Photo("image1.jpg")));
         PostResponse postResponse = postToPostResponseMapper.map(post);
         assertNull(postResponse.createdAt());

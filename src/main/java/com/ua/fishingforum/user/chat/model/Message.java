@@ -27,6 +27,16 @@ public class Message {
     private String content;
     @CreatedDate
     private Instant createdAt;
+    @ManyToOne
+    @JoinTable(schema = "forum", name = "chats_messages", joinColumns = @JoinColumn
+            (
+                    name = "message_id", referencedColumnName = "id", unique = true
+            ),
+            inverseJoinColumns = @JoinColumn
+                    (
+                            name = "chat_id", referencedColumnName = "id"
+                    ))
+    private Chat chat;
 
     @Override
     public String toString() {

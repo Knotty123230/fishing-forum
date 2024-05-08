@@ -34,4 +34,6 @@ public class UserRole implements GrantedAuthority, Serializable {
     public String getAuthority() {
         return authority;
     }
+
+
 }

@@ -1,11 +1,11 @@
 package com.ua.fishingforum.user.chat.usecase.impl;
 
-import com.ua.fishingforum.user.chat.controller.dto.ChatRequest;
-import com.ua.fishingforum.user.chat.controller.dto.ChatResponse;
-import com.ua.fishingforum.user.chat.controller.dto.MessageResponse;
 import com.ua.fishingforum.user.chat.model.Chat;
 import com.ua.fishingforum.user.chat.service.ChatService;
 import com.ua.fishingforum.user.chat.usecase.ChatUseCase;
+import com.ua.fishingforum.user.chat.web.controller.dto.ChatRequest;
+import com.ua.fishingforum.user.chat.web.controller.dto.ChatResponse;
+import com.ua.fishingforum.user.chat.web.controller.dto.MessageResponse;
 import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
@@ -45,7 +45,8 @@ public class ChatUseCaseFacade implements ChatUseCase {
                                 new UserProfileResponse(
                                         message.getFrom().getNickname(),
                                         message.getFrom().getImageLink()
-                                )
+                                ),
+                                message.getCreatedAt()
                         ))
                         .toList()
         );

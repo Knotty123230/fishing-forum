@@ -13,14 +13,16 @@ import org.springframework.data.domain.PageImpl;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @ExtendWith(MockitoExtension.class)
 class PagePostsToNewsResponseMapperImplTest {
     @InjectMocks
     PagePostsToNewsResponseMapperImpl pagePostsToNewsResponseMapper;
 
     @Test
-    void map_shouldSuccessMap(){
+    void map_shouldSuccessMap() {
         List<Post> posts = List.of(
                 new Post("Post 1", "Description 1", Set.of(new Photo("image1.jpg"))),
                 new Post("Post 2", "Description 2", Set.of(new Photo("image2.jpg")))
@@ -30,8 +32,9 @@ class PagePostsToNewsResponseMapperImplTest {
         assertTrue(newsResponse.posts().size() > 1);
         assertEquals(posts.get(0), newsResponse.posts().toArray()[0]);
     }
+
     @Test
-    void map_ShouldReturnEmptyList_WhenPageIsEmpty(){
+    void map_ShouldReturnEmptyList_WhenPageIsEmpty() {
         Page<Post> empty = Page.empty();
         NewsResponse newsResponse = pagePostsToNewsResponseMapper.map(empty);
         assertTrue(newsResponse.posts().isEmpty());
