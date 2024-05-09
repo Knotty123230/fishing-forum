@@ -3,6 +3,7 @@ package com.ua.fishingforum.user.chat.service;
 import com.ua.fishingforum.user.chat.model.Chat;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ChatService {
@@ -15,4 +16,6 @@ public interface ChatService {
     Chat updateChat(Chat chat);
 
     Optional<Chat> findChatByName(String chatName);
+
+    Optional<List<Chat>> findAllChatsForCurrentUser(UserProfile userProfile);
 }

@@ -7,6 +7,7 @@ import com.ua.fishingforum.user.profile.model.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Optional<Chat> findChatByName(String chatName) {
         return chatRepository.findByName(chatName);
+    }
+
+    @Override
+    public Optional<List<Chat>> findAllChatsForCurrentUser(UserProfile userProfile) {
+        return this.chatRepository.findChatsByMembers(userProfile);
     }
 }
