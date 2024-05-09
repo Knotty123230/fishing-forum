@@ -61,22 +61,7 @@ class WebSocketTest {
 
         // Wait for response
         CompletableFuture<List<MessageResponse>> messageFuture = new CompletableFuture<>();
-        stompSession.subscribe("/fishing-forum/chat/" + chatId + "/messages", new StompFrameHandler() {
-
-            @NotNull
-            @Override
-            public Type getPayloadType(@NotNull StompHeaders stompHeaders) {
-                return List.class;
-            }
-
-            @Override
-            public void handleFrame(@NonNull StompHeaders stompHeaders, Object o) {
-                List<MessageResponse> messageResponses = mapper.convertValue(o, new TypeReference<>() {
-                });
-
-                messageFuture.complete(messageResponses);
-            }
-        });
+        stompSession.subscribe("/fishing-forum/chat/" + chatId + "/messages", new RunStopFrameHandler(messageFuture, mapper));
         return messageFuture;
     }
 
@@ -90,8 +75,6 @@ class WebSocketTest {
         AccessToken accessToken = restTemplate.postForObject(loginUrl, loginRequest, AccessToken.class);
         assert accessToken != null;
         String token = accessToken.idToken();
-        RunStopFrameHandler runStopFrameHandler = new RunStopFrameHandler(new CompletableFuture<>());
-
         String wsUrl = "ws://localhost:" + port + "/ws";
 
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
@@ -151,24 +134,21 @@ class WebSocketTest {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     private static class RunStopFrameHandler implements StompFrameHandler {
 
-        CompletableFuture<Object> future;
+        CompletableFuture<List<MessageResponse>> future;
+        @Autowired
+        ObjectMapper objectMapper;
 
+        @NotNull
         @Override
-        public @NonNull Type getPayloadType(StompHeaders stompHeaders) {
-
-            log.info(stompHeaders.toString());
-
-            return byte[].class;
+        public Type getPayloadType(@NotNull StompHeaders stompHeaders) {
+            return List.class;
         }
 
         @Override
         public void handleFrame(@NonNull StompHeaders stompHeaders, Object o) {
-
-            log.info(o);
-
-            future.complete(o);
-
-            future = new CompletableFuture<>();
+            List<MessageResponse> messageResponses = objectMapper.convertValue(o, new TypeReference<>() {
+            });
+            future.complete(messageResponses);
         }
     }
 
@@ -180,10 +160,5 @@ class WebSocketTest {
         WebSocketStompClient stompClient;
 
         StompSession stompSession;
-
-        String sessionToken;
-
-        RunStopFrameHandler handler;
-
     }
 }
