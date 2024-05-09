@@ -109,8 +109,6 @@ class WebSocketTest {
         client = WebClient.builder()
                 .stompClient(stompClient)
                 .stompSession(stompSession)
-                .handler(runStopFrameHandler)
-                .sessionToken(token)
                 .build();
     }
 
