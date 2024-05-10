@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -25,18 +27,17 @@ public class ChatController {
     public static final String CHAT_FETCH_MESSAGE = "/chat/{chatId}/message";
     public static final String FETCH_ALL_CHAT_MESSAGES = "/chat/{chatId}/messages";
     public static final String FETCH_CREATE_CHAT = "/chat/create/{name}";
-    private static final String FETCH_ALL_CHATS_FOR_CURRENT_USER = "/chats";
-    private static final String FETCH_JOIN_CHAT = "/chat/join/{chatId}";
-    private static final String FETCH_JOIN_CHAT_SUBSCRIBE = "/chat/{chatId}/new-member";
+    public static final String FETCH_ALL_CHATS_FOR_CURRENT_USER = "/chats";
+    public static final String FETCH_JOIN_CHAT = "/chat/join/{chatId}";
+    public static final String FETCH_JOIN_CHAT_SUBSCRIBE = "/chat/{chatId}/new-member";
     private final ChatUseCase chatUseCase;
-
-
 
 
     @SubscribeMapping(FETCH_ALL_CHAT_MESSAGES)
     public List<MessageResponse> fetchSubscribeOnChatMessages(@Headers Map<String, Object> headers, @DestinationVariable("chatId") Long chatId) {
-        return chatUseCase.handleChatMessage(headers, chatId);
+        return chatUseCase.handleSubscribeChatMessage(headers, chatId);
     }
+
     @MessageMapping(CHAT_FETCH_MESSAGE)
     public void handleChatMessage(@DestinationVariable("chatId") Long chatId, MessageRequest messageRequest, @Headers Map<String, Object> headers) {
         this.chatUseCase.handleMessage(headers, chatId, messageRequest);
@@ -51,13 +52,15 @@ public class ChatController {
     public void fetchCreateChat(@Headers Map<String, Object> headers, ChatRequest chatRequest) {
         chatUseCase.createChat(headers, chatRequest);
     }
+
     @MessageMapping(FETCH_JOIN_CHAT)
-    public void fetchJoinChat(@DestinationVariable(value = "chatId") Long chatId){
-        this.chatUseCase.fetchJoinChat(chatId);
+    public void fetchJoinChat(@Headers Map<String, Object> headers, @DestinationVariable(value = "chatId") Long chatId, MessageRequest messageRequest) {
+        this.chatUseCase.fetchJoinChat(headers, chatId, messageRequest);
     }
+
     @SubscribeMapping(FETCH_JOIN_CHAT_SUBSCRIBE)
-    public MessageResponse fetchJoinChat(@DestinationVariable(value = "chatId") Long chatId, UserProfileResponse joinedMember){
-        return this.chatUseCase.fetchJoinChatMemberAndSendMessage(chatId, joinedMember);
+    public ChatResponse fetchJoinChat(@DestinationVariable(value = "chatId") Long chatId) {
+        return this.chatUseCase.fetchJoinChatMemberAndSendMessage(chatId);
     }
 
 }

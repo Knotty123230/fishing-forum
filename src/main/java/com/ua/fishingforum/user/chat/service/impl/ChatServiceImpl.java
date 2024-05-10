@@ -33,7 +33,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Chat updateChat(Chat chat) {
-        return chatRepository.saveAndFlush(chat);
+        return chatRepository.save(chat);
     }
 
     @Override

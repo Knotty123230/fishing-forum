@@ -7,15 +7,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "chats", schema = "forum")
 @Data
-@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +21,7 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany( fetch = FetchType.EAGER)
     @ToString.Exclude
     @JoinTable(schema = "forum", name = "chats_user-profiles",
             joinColumns = @JoinColumn
@@ -38,7 +34,7 @@ public class Chat {
                     )
     )
     private List<UserProfile> members = new LinkedList<>();
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "forum", name = "chats_messages", joinColumns = @JoinColumn
             (
                     name = "chat_id", referencedColumnName = "id"
@@ -54,5 +50,18 @@ public class Chat {
 
     public Set<UserProfile> getMembersHashSet() {
         return new HashSet<>(members);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chat chat = (Chat) o;
+        return Objects.equals(id, chat.id) && Objects.equals(name, chat.name) && Objects.equals(members, chat.members) && Objects.equals(messages, chat.messages) && Objects.equals(createdAt, chat.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, members, messages, createdAt);
     }
 }

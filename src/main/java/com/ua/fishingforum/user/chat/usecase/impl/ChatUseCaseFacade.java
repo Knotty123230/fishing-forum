@@ -15,6 +15,7 @@ import com.ua.fishingforum.user.chat.web.controller.dto.MessageResponse;
 import com.ua.fishingforum.user.profile.api.service.CurrentUserProfileApiService;
 import com.ua.fishingforum.user.profile.model.UserProfile;
 import com.ua.fishingforum.user.profile.web.dto.UserProfileResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -23,18 +24,21 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import static com.ua.fishingforum.user.chat.web.controller.ChatController.FETCH_JOIN_CHAT_SUBSCRIBE;
+
 
 @Component
 @RequiredArgsConstructor
 public class ChatUseCaseFacade implements ChatUseCase {
     private static final String EXCEPTION_MESSAGE = "чат з айді %s не знайдено";
+    private static final String EXCEPTION_MESSAGE_NOT_JOIN_ANY_CHAT = "Користувач з ім'ям %s ще не приєднався до жодного чату";
+    private static final String JOIN_CHAT_SUCCESSFUL = "користувач %s приєднався до чату";
     private final CurrentUserProfileApiService currentUserProfileApiService;
     private final ChatService chatService;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final MessageService messageService;
     private final MessageToMessageResponseMapper messageToMessageResponseMapper;
     private final ChatToChatResponseMapper chatToChatResponseMapper;
-
 
     @Override
     public void createChat(Map<String, Object> headers, ChatRequest chatRequest) {
@@ -79,7 +83,7 @@ public class ChatUseCaseFacade implements ChatUseCase {
     }
 
     @Override
-    public List<MessageResponse> handleChatMessage(Map<String, Object> headers, Long chatId) {
+    public List<MessageResponse> handleSubscribeChatMessage(Map<String, Object> headers, Long chatId) {
         Chat chat = chatService.findChatById(chatId)
                 .orElseThrow(() -> new CustomException(EXCEPTION_MESSAGE.formatted(chatId)));
         return chat.getMessages().stream()
@@ -93,35 +97,41 @@ public class ChatUseCaseFacade implements ChatUseCase {
     public List<ChatResponse> fetchAllChatsForCurrentUser() {
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
         List<Chat> chats = this.chatService.findAllChatsForCurrentUser(userProfile).
-                orElseThrow(() -> new CustomException("Користувач з ім'ям %s ще не приєднався до жодного чату".formatted(userProfile.getNickname())));
+                orElseThrow(() -> new CustomException(EXCEPTION_MESSAGE_NOT_JOIN_ANY_CHAT.formatted(userProfile.getNickname())));
         return chats.stream()
                 .map(this.chatToChatResponseMapper::map)
                 .toList();
     }
 
     @Override
-    public void fetchJoinChat(Long chatId) {
+    @Transactional
+    public void fetchJoinChat(Map<String, Object> headers, Long chatId, MessageRequest messageRequest) {
+
         UserProfile userProfile = currentUserProfileApiService.currentUserProfile();
-        Chat chat = this.chatService.findChatById(chatId).orElseThrow(() -> new CustomException("Чату з id %d не існує".formatted(chatId)));
+        Chat chat = this.chatService.findChatById(chatId).orElseThrow(() -> new CustomException(EXCEPTION_MESSAGE.formatted(chatId)));
+        Message build = Message.builder()
+                .content(messageRequest.content())
+                .chat(chat)
+                .build();
+        Message message = this.messageService.save(build);
         chat.getMembers().add(userProfile);
+        chat.getMessages().add(message);
         this.chatService.updateChat(chat);
-        simpMessagingTemplate.convertAndSend("/chat/{chatId}/new-member".replace(
-                        "{chatId}",
-                        chat.getId().toString())
-                , new UserProfileResponse(
+
+        String url = FETCH_JOIN_CHAT_SUBSCRIBE.replace(
+                "{chatId}",
+                chat.getId().toString());
+        simpMessagingTemplate.convertAndSend(
+                url,
+                new UserProfileResponse(
                         userProfile.getNickname(),
                         userProfile.getImageLink())
         );
     }
 
     @Override
-    public MessageResponse fetchJoinChatMemberAndSendMessage(Long chatId, UserProfileResponse joinedMember) {
-        Chat chat = this.chatService.findChatById(chatId).orElseThrow(() -> new CustomException("чат з id %d не знайдено".formatted(chatId)));
-        Message message = Message.builder()
-                .chat(chat)
-                .content("користувач %s приєднався до чату".formatted(joinedMember.nickname()))
-                .build();
-        Message createdMessage = this.messageService.save(message);
-        return this.messageToMessageResponseMapper.map(createdMessage);
+    public ChatResponse fetchJoinChatMemberAndSendMessage(Long chatId) {
+        Chat chat = this.chatService.findChatById(chatId).orElseThrow(() -> new CustomException(EXCEPTION_MESSAGE.formatted(chatId)));
+        return this.chatToChatResponseMapper.map(chat);
     }
 }

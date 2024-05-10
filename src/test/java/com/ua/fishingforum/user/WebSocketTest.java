@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ua.fishingforum.security.web.dto.AccessToken;
 import com.ua.fishingforum.security.web.dto.LoginRequest;
+import com.ua.fishingforum.user.chat.web.controller.dto.ChatResponse;
 import com.ua.fishingforum.user.chat.web.controller.dto.MessageRequest;
 import com.ua.fishingforum.user.chat.web.controller.dto.MessageResponse;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
@@ -16,11 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.messaging.simp.stomp.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -34,7 +34,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -42,6 +44,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class WebSocketTest {
 
 
@@ -54,19 +57,20 @@ class WebSocketTest {
     private int port;
 
     @NotNull
-    private CompletableFuture<List<MessageResponse>> getMessageResponseCompletableFuture(Long chatId, MessageRequest messageRequest) {
+    private CompletableFuture<List<MessageResponse>> getMessageResponseCompletableFuture(String sendUrl, String subscribeUrl, MessageRequest messageRequest) throws InterruptedException {
         StompSession stompSession = client.getStompSession();
 
-        stompSession.send("/fishing-forum/chat/" + chatId + "/message", messageRequest);
-
-        // Wait for response
+        stompSession.send(sendUrl, messageRequest);
+        Thread.sleep(2000);
         CompletableFuture<List<MessageResponse>> messageFuture = new CompletableFuture<>();
-        stompSession.subscribe("/fishing-forum/chat/" + chatId + "/messages", new RunStopFrameHandler(messageFuture, mapper));
+        TypeReference<List<MessageResponse>> typeReference = new TypeReference<>() {
+        };
+        stompSession.subscribe(subscribeUrl, new RunStopFrameHandler<>(messageFuture, typeReference, mapper));
         return messageFuture;
     }
 
 
-    @BeforeAll
+    @BeforeEach
     public void setup() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
         String loginUrl = "http://localhost:" + port + "/api/v1/authentication/access_token";
@@ -85,8 +89,7 @@ class WebSocketTest {
         handshakeHeaders.add("Authorization", "Bearer " + token);
         StompHeaders connectHeaders = new StompHeaders();
         connectHeaders.add("Authorization", "Bearer " + token);
-        StompSession stompSession = stompClient.connectAsync(wsUrl, handshakeHeaders, connectHeaders, new StompSessionHandlerAdapter() {
-                })
+        StompSession stompSession = stompClient.connectAsync(wsUrl, handshakeHeaders, connectHeaders, new MyStompSessionHandler())
                 .get(5, TimeUnit.SECONDS);
 
         client = WebClient.builder()
@@ -95,7 +98,7 @@ class WebSocketTest {
                 .build();
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown() {
 
         if (client.getStompSession().isConnected()) {
@@ -105,14 +108,17 @@ class WebSocketTest {
     }
 
     @Test
-    @WithMockUser
+    @Order(1)
     void should_PassSuccessfully_When_CreateChat() throws Exception {
-        Long chatId = 1L;
+        long chatId = 1L;
         MessageRequest messageRequest = new MessageRequest("Test message");
 
-        CompletableFuture<List<MessageResponse>> messageFuture = getMessageResponseCompletableFuture(chatId, messageRequest);
+        CompletableFuture<List<MessageResponse>> messageFuture = getMessageResponseCompletableFuture(
+                "/fishing-forum/chat/" + chatId + "/message",
+                "/fishing-forum/chat/" + chatId + "/messages",
+                messageRequest);
 
-        List<MessageResponse> messageResponse = messageFuture.get(5, TimeUnit.SECONDS);
+        List<MessageResponse> messageResponse = messageFuture.get(10, TimeUnit.SECONDS);
         Assertions.assertNotNull(messageResponse);
         Assertions.assertNotNull(messageResponse.get(0).id());
         Assertions.assertEquals(messageRequest.content(), messageResponse.get(0).content());
@@ -120,6 +126,35 @@ class WebSocketTest {
         Assertions.assertNotNull(messageResponse.get(0).fromMessage().nickname());
         Assertions.assertNotNull(messageResponse.get(0).createdAt());
     }
+
+    @Test
+    @Order(2)
+    void should_successfully_join_chat() throws ExecutionException, InterruptedException, TimeoutException {
+        long chatId = 1L;
+
+        StompSession stompSession = client.getStompSession();
+        MessageRequest messageRequest = new MessageRequest("Test message1");
+        stompSession.send("/fishing-forum/chat/join/" + chatId, messageRequest);
+
+        CompletableFuture<ChatResponse> messageFuture = new CompletableFuture<>();
+        stompSession.subscribe("/fishing-forum/chat/" + chatId + "/new-member", new StompFrameHandler() {
+            @NotNull
+            @Override
+            public Type getPayloadType(@NotNull StompHeaders headers) {
+                return ChatResponse.class;
+            }
+
+            @Override
+            public void handleFrame(@NotNull StompHeaders headers, Object payload) {
+                messageFuture.complete((ChatResponse) payload);
+            }
+        });
+
+        ChatResponse chatResponse = messageFuture.get(5, TimeUnit.SECONDS);
+
+        Assertions.assertNotNull(chatResponse);
+    }
+
 
     private List<Transport> createTransportClient() {
         List<Transport> transports = new ArrayList<>(1);
@@ -132,23 +167,50 @@ class WebSocketTest {
     @Data
     @AllArgsConstructor
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    private static class RunStopFrameHandler implements StompFrameHandler {
-
-        CompletableFuture<List<MessageResponse>> future;
+    private static class RunStopFrameHandler<T> implements StompFrameHandler {
+        CompletableFuture<T> future;
+        TypeReference<T> typeReference;
         @Autowired
         ObjectMapper objectMapper;
 
         @NotNull
         @Override
         public Type getPayloadType(@NotNull StompHeaders stompHeaders) {
-            return List.class;
+            return typeReference.getType();
         }
 
         @Override
-        public void handleFrame(@NonNull StompHeaders stompHeaders, Object o) {
-            List<MessageResponse> messageResponses = objectMapper.convertValue(o, new TypeReference<>() {
-            });
-            future.complete(messageResponses);
+        public void handleFrame(@NotNull StompHeaders stompHeaders, Object o) {
+            T messageResponse = objectMapper.convertValue(o, typeReference);
+            future.complete(messageResponse);
+        }
+
+    }
+    private static class MyStompSessionHandler implements StompSessionHandler{
+
+        @Override
+        public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+
+        }
+
+        @Override
+        public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
+            throw new RuntimeException("Failure in WebSocket handling", exception);
+        }
+
+        @Override
+        public void handleTransportError(StompSession session, Throwable exception) {
+
+        }
+
+        @Override
+        public Type getPayloadType(StompHeaders headers) {
+            return null;
+        }
+
+        @Override
+        public void handleFrame(StompHeaders headers, Object payload) {
+
         }
     }
 
